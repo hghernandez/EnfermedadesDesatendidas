@@ -1,6 +1,7 @@
 library(tidyverse)
 library(R.utils)
 library(foreign)
+library(sf)
 
 
 ##%######################################################%##
@@ -37,13 +38,15 @@ for(i in 2:length(def0518)){
 str(def04)
 str(def0518.df)
 
-def04$ANO <- as.numeric(def04$ANO)
+def04$ANO <- as.numeric(as.character(def04$ANO))
 
 dataset <- rbind(def04,def0518.df)
 
 #LLevo las columnas a minusculas
 
 names(dataset) <- tolower(names(dataset))
+
+
 
 ##%######################################################%##
 #                                                          #
@@ -165,6 +168,33 @@ dataset <- dataset %>%
                          sexo== 9 ~ '9.Mal definido'))
 
 
+##%######################################################%##
+#                                                          #
+####              Creo el dataset de casos              ####
+####           #sumo total edad y total sexo            ####
+#                                                          #
+##%######################################################%##
+
+View(dataset %>%
+  group_by(provres,depres) %>%
+  summarise(n= n()))
+
+casos <- dataset %>%
+  filter(!is.na(enf_desa_sub))%>%
+  group_by(ano,provres,depres,enf_desa_sub,enf_desa_tot,edadquinq,sexo) %>%
+  summarise(casos= n()) %>% #Agrego total edad
+  bind_rows(group_by(.,ano,provres,depres,enf_desa_sub,enf_desa_tot,sexo)%>%
+              summarise(casos=sum(casos))%>%
+              mutate(edadquinq= '18.Total')) %>% #Agrego Ambos Sexos
+  bind_rows(group_by(.,ano,provres,depres,enf_desa_sub,enf_desa_tot,edadquinq)%>%
+              summarise(casos=sum(casos))%>%
+              mutate(sexo= '3.Ambos sexos')) %>% #Genero un total NTD
+  bind_rows(group_by(.,ano,provres,depres,edadquinq,sexo)%>%
+              summarise(casos=sum(casos))%>%
+              mutate(enf_desa_sub= '30.Total NTD',
+                     enf_desa_tot='04.Total NTD')) %>%
+  filter(substring(sexo,1,1) != '9' & edadquinq != "18.Sin especificar")
+
 
 ##%######################################################%##
 #                                                          #
@@ -174,3 +204,65 @@ dataset <- dataset %>%
 
 
 pob_deptos <- loadObject("PoblacionesEstimadas/pobdeptos0125.Rbin")
+
+
+#Armo una funcion para fixear los codigos
+
+fix_cod <- function(x){
+ 
+  x <- ifelse(stringr::str_length(x)== 1,paste0('00',x),
+              ifelse(stringr::str_length(x)== 2,paste0('0',x),as.character(x))) 
+  return(x)
+}
+
+#Fixeo depres
+
+casos <- casos %>%
+  mutate(depres= fix_cod(depres))
+
+#Fixeo coddep
+
+pob_deptos <- pob_deptos %>%
+  mutate(coddep= fix_cod(coddep),
+         codprov= ifelse(codprov < 10,paste0('0',codprov),codprov))
+
+
+#Uno los casos y la poblacion estimada
+names(casos)
+names(pob_deptos)
+
+casos <- pob_deptos %>%
+  filter(ano >= 2004 & ano <= 2018) %>%
+  left_join(casos, by= c("ano","codprov"="provres","coddep"="depres","sexo","gredad"="edadquinq")) %>%
+  mutate(link= paste0(codprov,coddep))
+
+#Exporto el dataset
+
+save(casos, file="datosMort/data.RData")
+
+##%######################################################%##
+#                                                          #
+####                Cargo la cartografia                ####
+#                                                          #
+##%######################################################%##
+
+#Agrego los objetos geograficos a Argentina
+
+#Cargo los datos
+
+sf_use_s2(FALSE) #con esto anulo el error :Error in wk_handle.wk_wkb(wkb, s2_geography_writer(oriented = oriented,  : 
+#Loop 0 is not valid: Edge 2 crosses edge 4 
+
+deptos <- st_read(dsn= "cartografia",
+                     layer = "pxdptodatosok")
+
+
+#Selecciono sin Antartida
+
+deptos <- st_crop(deptos,xmin= -74,ymin= -55, xmax= -50, ymax= -21.74506)
+
+ggplot(deptos)+
+  geom_sf()
+
+
+View(deptos)
