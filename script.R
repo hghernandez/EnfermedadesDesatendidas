@@ -2,6 +2,7 @@ library(tidyverse)
 library(R.utils)
 library(foreign)
 library(sf)
+library(epitools)
 
 
 ##%######################################################%##
@@ -35,8 +36,6 @@ for(i in 2:length(def0518)){
 
 #Unifico el dataset
 
-str(def04)
-str(def0518.df)
 
 def04$ANO <- as.numeric(as.character(def04$ANO))
 
@@ -45,7 +44,6 @@ dataset <- rbind(def04,def0518.df)
 #LLevo las columnas a minusculas
 
 names(dataset) <- tolower(names(dataset))
-
 
 
 ##%######################################################%##
@@ -77,9 +75,6 @@ dataset <- dataset %>%
          uniedad >= 8 ~ '18.Sin especificar'))
 
 
-dataset %>%
-  group_by(edadquinq) %>%
-  summarise(n= n())
 
 ##%######################################################%##
 #                                                          #
@@ -119,12 +114,6 @@ dataset <- dataset %>%
   substring(codmuer,1,4)== 'A923' ~ '28.Enfermedad viral del oeste del Nilo',
   substring(codmuer,1,3)== 'A95' ~ '29.Fiebre Amarilla'))
 
-
-
-
-View(dataset %>%
-  group_by(enf_desa_sub)%>%
-  summarise(n= n()))
 
 ##%######################################################%##
 #                                                          #
@@ -196,20 +185,10 @@ casos <- dataset %>%
   filter(substring(sexo,1,1) != '9' & edadquinq != "18.Sin especificar")
 
 
-##%######################################################%##
-#                                                          #
-####               Poblaciones estimadas                ####
-#                                                          #
-##%######################################################%##
-
-
-pob_deptos <- loadObject("PoblacionesEstimadas/pobdeptos0125.Rbin")
-
-
 #Armo una funcion para fixear los codigos
 
 fix_cod <- function(x){
- 
+  
   x <- ifelse(stringr::str_length(x)== 1,paste0('00',x),
               ifelse(stringr::str_length(x)== 2,paste0('0',x),as.character(x))) 
   return(x)
@@ -219,6 +198,31 @@ fix_cod <- function(x){
 
 casos <- casos %>%
   mutate(depres= fix_cod(depres))
+
+#Guardo los casos
+
+save(casos, file="datosMort/data.RData")
+load("datosMort/data.RData")
+
+##%######################################################%##
+#                                                          #
+####             Genero un dataset para NTD             ####
+#                                                          #
+##%######################################################%##
+
+
+ntd <- casos %>%
+  filter(grepl("Total",enf_desa_sub))
+
+
+##%######################################################%##
+#                                                          #
+####               Poblaciones estimadas                ####
+#                                                          #
+##%######################################################%##
+
+
+pob_deptos <- loadObject("PoblacionesEstimadas/pobdeptos0125.Rbin")
 
 #Fixeo coddep
 
@@ -231,14 +235,118 @@ pob_deptos <- pob_deptos %>%
 names(casos)
 names(pob_deptos)
 
-casos <- pob_deptos %>%
+ntd <- pob_deptos %>%
   filter(ano >= 2004 & ano <= 2018) %>%
-  left_join(casos, by= c("ano","codprov"="provres","coddep"="depres","sexo","gredad"="edadquinq")) %>%
-  mutate(link= paste0(codprov,coddep))
+  left_join(ntd, by= c("ano","codprov"="provres","coddep"="depres","sexo","gredad"="edadquinq")) %>%
+  mutate(link= paste0(codprov,coddep)) %>%
+  fill(enf_desa_sub,.direction = "downup") %>%
+  fill(enf_desa_tot,.direction = "downup")
 
-#Exporto el dataset
 
-save(casos, file="datosMort/data.RData")
+#Seteo los valroes NULL a 0
+ntd[is.na(ntd)] <- 0
+
+
+##%######################################################%##
+#                                                          #
+####                  Calculo las RME                   ####
+#                                                          #
+##%######################################################%##
+
+
+#Standar de casos
+
+std = ntd %>%
+  filter(gredad != '18.Total')%>%
+  group_by(enf_desa_sub,sexo,gredad) %>%
+  summarise(casos=sum(casos),
+            poblacion=sum(poblacion)) %>%
+  mutate(order= as.numeric(substring(gredad,1,2))) %>%
+  arrange(sexo,order)
+
+#casos
+
+
+ntd_casos <- ntd %>%
+  filter(gredad != '18.Total')%>%
+  group_by(link,enf_desa_sub,sexo,gredad) %>%
+  summarise(casos=sum(casos),
+            poblacion=sum(poblacion)) %>%
+  mutate(order= as.numeric(substring(gredad,1,2))) %>%
+  arrange(link,sexo,order)
+
+
+#Departamentos = 532
+#Sexo= 3
+# Lista de 1596 objetos (532*3)
+
+
+
+tasas_ntd <- list()
+
+for(i in 1:1596){
+  for(j in 1:3){
+  
+  tasas_ntd[[i]] <- ageadjust.indirect(count = ntd_casos[(1+17*(i-1)):(17+17*(i-1)),5],
+                                       pop= ntd_casos[(1+17*(i-1)):(17+17*(i-1)),6], 
+                                       stdcount = std[(1+17*(j-1)):(17+17*(j-1)),4], 
+                                       stdpop= std[(1+17*(j-1)):(17+17*(j-1)),5],
+                                       stdrate = std[(1+17*(j-1)):(17+17*(j-1)),4]/std[(1+17*(j-1)):(17+17*(j-1)),5])
+  
+  }
+  print(i)
+}
+
+
+#Guardo las tasas en un data frame
+
+tasas_ntd_df <- as.data.frame(1:1596)
+
+tasas_ntd_df$observados <- 0
+tasas_ntd_df$esperados <- 0
+tasas_ntd_df$RME <- 0
+tasas_ntd_df$ic_inf <- 0
+tasas_ntd_df$ic_sup <- 0
+
+
+for(i in 1:1596){
+  
+  tasas_ntd_df[i,]$observados <- tasas_ntd[[i]]$sir[1]
+  tasas_ntd_df[i,]$esperados <- tasas_ntd[[i]]$sir[2]
+  tasas_ntd_df[i,]$RME <- tasas_ntd[[i]]$sir[3]*100
+  tasas_ntd_df[i,]$ic_inf <- tasas_ntd[[i]]$sir[4]*100
+  tasas_ntd_df[i,]$ic_sup <- tasas_ntd[[i]]$sir[5]*100
+ print(i) 
+  
+}
+
+#Agrego el sexo
+
+s <- unique(ntd_casos$sexo)
+
+tasas_ntd_df$sexo <- rep(s,532)
+
+#Agrego el link
+
+l <- unique(ntd_casos$link)
+
+tasas_ntd_df$link <- rep(l,each= 3)
+
+#agrego el evento
+
+tasas_ntd_df[,1] <- "Total NTD"
+
+colnames(tasas_ntd_df)[1] <- 'Evento'
+
+##%######################################################%##
+#                                                          #
+####                  Guardo las tasas                  ####
+#                                                          #
+##%######################################################%##
+
+save(tasas_ntd_df,file="tasas/tasas_ntd.RData")
+
+
 
 ##%######################################################%##
 #                                                          #
@@ -265,4 +373,4 @@ ggplot(deptos)+
   geom_sf()
 
 
-View(deptos)
+unique(deptos$link)
