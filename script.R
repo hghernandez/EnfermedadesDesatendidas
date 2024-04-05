@@ -3,6 +3,8 @@ library(R.utils)
 library(foreign)
 library(sf)
 library(epitools)
+library(spdep)
+library(maptools)
 
 
 ##%######################################################%##
@@ -374,3 +376,25 @@ ggplot(deptos)+
 
 
 unique(deptos$link)
+
+#Genero la matriz de vecindad
+
+map <- readShapePoly("cartografia/pxdptodatosok.shp")
+
+#Genero la matriz de contiguidad#
+
+map_nb <- poly2nb(map,queen= TRUE)
+
+#Armo mapa de matriz de vecindad#
+
+
+coord <- coordinates(map)
+
+
+
+plot(map, border="grey", lwd=0.5, main= "Matriz de vecindad")
+plot(map_nb, coord, points=FALSE, add=TRUE, lwd=0.7)
+
+#Guardar matriz de vecindad#
+
+write.nb.gal(map_nb,"matriz de vecindad/matriz")
