@@ -4,7 +4,7 @@ library(foreign)
 library(sf)
 library(epitools)
 library(spdep)
-library(maptools)
+
 
 
 ##%######################################################%##
@@ -170,8 +170,8 @@ View(dataset %>%
   group_by(provres,depres) %>%
   summarise(n= n()))
 
-casos <- dataset %>%
-  filter(!is.na(enf_desa_sub))%>%
+casos_sin_caba <- dataset %>%
+  filter(!is.na(enf_desa_sub) & provres != '02')%>%
   group_by(ano,provres,depres,enf_desa_sub,enf_desa_tot,edadquinq,sexo) %>%
   summarise(casos= n()) %>% #Agrego total edad
   bind_rows(group_by(.,ano,provres,depres,enf_desa_sub,enf_desa_tot,sexo)%>%
@@ -186,6 +186,29 @@ casos <- dataset %>%
                      enf_desa_tot='04.Total NTD')) %>%
   filter(substring(sexo,1,1) != '9' & edadquinq != "18.Sin especificar")
 
+
+casos_caba <- dataset %>%
+  filter(!is.na(enf_desa_sub) & provres == '02')%>%
+  group_by(ano,provres,enf_desa_sub,enf_desa_tot,edadquinq,sexo) %>%
+  summarise(casos= n()) %>% #Agrego total edad
+  bind_rows(group_by(.,ano,provres,enf_desa_sub,enf_desa_tot,sexo)%>%
+              summarise(casos=sum(casos))%>%
+              mutate(edadquinq= '18.Total')) %>% #Agrego Ambos Sexos
+  bind_rows(group_by(.,ano,provres,enf_desa_sub,enf_desa_tot,edadquinq)%>%
+              summarise(casos=sum(casos))%>%
+              mutate(sexo= '3.Ambos sexos')) %>% #Genero un total NTD
+  bind_rows(group_by(.,ano,provres,edadquinq,sexo)%>%
+              summarise(casos=sum(casos))%>%
+              mutate(enf_desa_sub= '30.Total NTD',
+                     enf_desa_tot='04.Total NTD')) %>%
+  filter(substring(sexo,1,1) != '9' & edadquinq != "18.Sin especificar") %>%
+  mutate(depres = 000)
+  
+
+#Unifico los casos
+
+casos <- casos_caba %>%
+  bind_rows(casos_sin_caba)
 
 #Armo una funcion para fixear los codigos
 
@@ -206,195 +229,7 @@ casos <- casos %>%
 save(casos, file="datosMort/data.RData")
 load("datosMort/data.RData")
 
-##%######################################################%##
-#                                                          #
-####             Genero un dataset para NTD             ####
-#                                                          #
-##%######################################################%##
 
 
-ntd <- casos %>%
-  filter(grepl("Total",enf_desa_sub))
 
 
-##%######################################################%##
-#                                                          #
-####               Poblaciones estimadas                ####
-#                                                          #
-##%######################################################%##
-
-
-pob_deptos <- loadObject("PoblacionesEstimadas/pobdeptos0125.Rbin")
-
-#Fixeo coddep
-
-pob_deptos <- pob_deptos %>%
-  mutate(coddep= fix_cod(coddep),
-         codprov= ifelse(codprov < 10,paste0('0',codprov),codprov))
-
-
-#Uno los casos y la poblacion estimada
-names(casos)
-names(pob_deptos)
-
-ntd <- pob_deptos %>%
-  filter(ano >= 2004 & ano <= 2018) %>%
-  left_join(ntd, by= c("ano","codprov"="provres","coddep"="depres","sexo","gredad"="edadquinq")) %>%
-  mutate(link= paste0(codprov,coddep)) %>%
-  fill(enf_desa_sub,.direction = "downup") %>%
-  fill(enf_desa_tot,.direction = "downup")
-
-
-#Seteo los valroes NULL a 0
-ntd[is.na(ntd)] <- 0
-
-
-##%######################################################%##
-#                                                          #
-####                  Calculo las RME                   ####
-#                                                          #
-##%######################################################%##
-
-
-#Standar de casos
-
-std = ntd %>%
-  filter(gredad != '18.Total')%>%
-  group_by(enf_desa_sub,sexo,gredad) %>%
-  summarise(casos=sum(casos),
-            poblacion=sum(poblacion)) %>%
-  mutate(order= as.numeric(substring(gredad,1,2))) %>%
-  arrange(sexo,order)
-
-#casos
-
-
-ntd_casos <- ntd %>%
-  filter(gredad != '18.Total')%>%
-  group_by(link,enf_desa_sub,sexo,gredad) %>%
-  summarise(casos=sum(casos),
-            poblacion=sum(poblacion)) %>%
-  mutate(order= as.numeric(substring(gredad,1,2))) %>%
-  arrange(link,sexo,order)
-
-
-#Departamentos = 532
-#Sexo= 3
-# Lista de 1596 objetos (532*3)
-
-
-
-tasas_ntd <- list()
-
-for(i in 1:1596){
-  for(j in 1:3){
-  
-  tasas_ntd[[i]] <- ageadjust.indirect(count = ntd_casos[(1+17*(i-1)):(17+17*(i-1)),5],
-                                       pop= ntd_casos[(1+17*(i-1)):(17+17*(i-1)),6], 
-                                       stdcount = std[(1+17*(j-1)):(17+17*(j-1)),4], 
-                                       stdpop= std[(1+17*(j-1)):(17+17*(j-1)),5],
-                                       stdrate = std[(1+17*(j-1)):(17+17*(j-1)),4]/std[(1+17*(j-1)):(17+17*(j-1)),5])
-  
-  }
-  print(i)
-}
-
-
-#Guardo las tasas en un data frame
-
-tasas_ntd_df <- as.data.frame(1:1596)
-
-tasas_ntd_df$observados <- 0
-tasas_ntd_df$esperados <- 0
-tasas_ntd_df$RME <- 0
-tasas_ntd_df$ic_inf <- 0
-tasas_ntd_df$ic_sup <- 0
-
-
-for(i in 1:1596){
-  
-  tasas_ntd_df[i,]$observados <- tasas_ntd[[i]]$sir[1]
-  tasas_ntd_df[i,]$esperados <- tasas_ntd[[i]]$sir[2]
-  tasas_ntd_df[i,]$RME <- tasas_ntd[[i]]$sir[3]*100
-  tasas_ntd_df[i,]$ic_inf <- tasas_ntd[[i]]$sir[4]*100
-  tasas_ntd_df[i,]$ic_sup <- tasas_ntd[[i]]$sir[5]*100
- print(i) 
-  
-}
-
-#Agrego el sexo
-
-s <- unique(ntd_casos$sexo)
-
-tasas_ntd_df$sexo <- rep(s,532)
-
-#Agrego el link
-
-l <- unique(ntd_casos$link)
-
-tasas_ntd_df$link <- rep(l,each= 3)
-
-#agrego el evento
-
-tasas_ntd_df[,1] <- "Total NTD"
-
-colnames(tasas_ntd_df)[1] <- 'Evento'
-
-##%######################################################%##
-#                                                          #
-####                  Guardo las tasas                  ####
-#                                                          #
-##%######################################################%##
-
-save(tasas_ntd_df,file="tasas/tasas_ntd.RData")
-
-
-
-##%######################################################%##
-#                                                          #
-####                Cargo la cartografia                ####
-#                                                          #
-##%######################################################%##
-
-#Agrego los objetos geograficos a Argentina
-
-#Cargo los datos
-
-sf_use_s2(FALSE) #con esto anulo el error :Error in wk_handle.wk_wkb(wkb, s2_geography_writer(oriented = oriented,  : 
-#Loop 0 is not valid: Edge 2 crosses edge 4 
-
-deptos <- st_read(dsn= "cartografia",
-                     layer = "pxdptodatosok")
-
-
-#Selecciono sin Antartida
-
-deptos <- st_crop(deptos,xmin= -74,ymin= -55, xmax= -50, ymax= -21.74506)
-
-ggplot(deptos)+
-  geom_sf()
-
-
-unique(deptos$link)
-
-#Genero la matriz de vecindad
-
-map <- readShapePoly("cartografia/pxdptodatosok.shp")
-
-#Genero la matriz de contiguidad#
-
-map_nb <- poly2nb(map,queen= TRUE)
-
-#Armo mapa de matriz de vecindad#
-
-
-coord <- coordinates(map)
-
-
-
-plot(map, border="grey", lwd=0.5, main= "Matriz de vecindad")
-plot(map_nb, coord, points=FALSE, add=TRUE, lwd=0.7)
-
-#Guardar matriz de vecindad#
-
-write.nb.gal(map_nb,"matriz de vecindad/matriz")
