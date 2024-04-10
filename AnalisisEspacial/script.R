@@ -6,7 +6,7 @@ library(epitools)
 library(spdep)
 library(leaflet)
 
-load(file="tasas/tasas_chagas_suav.RData")
+load(file="tasas/tasas_Equinococosis_suav.RData")
 
 ##%######################################################%##
 #                                                          #
@@ -18,14 +18,14 @@ load(file="tasas/tasas_chagas_suav.RData")
 
 matriz <- read.gal("matriz de vecindad/matriz")
 
-tasas_chagas_df[is.na(tasas_chagas_df)] <- 0
+tasas_enf_df[is.na(tasas_enf_df)] <- 0
 
-sexo = unique(tasas_chagas_df$sexo)
+sexo = unique(tasas_enf_df$sexo)
 
 for(sexo in sexo){
 
-  tasas_chagas_df[tasas_chagas_df$sexo== sexo,c(10:14)] <- cbind(attr(localmoran(tasas_chagas_df$suavizadas[tasas_chagas_df$sexo== sexo[1]],nb2listw(matriz,style = "B")),"quadr"),
-                                                  localmoran(tasas_chagas_df$suavizadas[tasas_chagas_df$sexo== sexo[1]],nb2listw(matriz,style = "B"))[,c(1,5)]
+  tasas_enf_df[tasas_enf_df$sexo== sexo,c(10:14)] <- cbind(attr(localmoran(tasas_enf_df$suavizadas[tasas_enf_df$sexo== sexo[1]],nb2listw(matriz,style = "B")),"quadr"),
+                                                  localmoran(tasas_enf_df$suavizadas[tasas_enf_df$sexo== sexo[1]],nb2listw(matriz,style = "B"))[,c(1,5)]
                                                   )
 
     
@@ -35,7 +35,7 @@ for(sexo in sexo){
 
 #Armo los cluster
 
-tasas_chagas_df <- tasas_chagas_df %>%
+tasas_enf_df <- tasas_enf_df %>%
   mutate(cluster= case_when(`Pr(z != E(Ii))` > 0.05 ~ 'no significativo',
                             TRUE ~ mean))
 
@@ -75,12 +75,12 @@ deptos <- deptos %>%
 
 
 deptos <- deptos %>%
-  left_join(tasas_chagas_df %>% filter(grepl("3.",sexo)) %>% select(link,RME,suavizadas,mean,cluster))
+  left_join(tasas_enf_df %>% filter(grepl("3.",sexo)) %>% select(link,RME,suavizadas,mean,cluster))
 
 #Calculo los quintiles 
 
-deptos$suavizadas_agrup <- cut(deptos$suavizadas,quantile(deptos$suavizadas,probs= c(0,0.2,0.4,0.6,0.8,1)),
-                               dig.lab = 4)
+deptos$suavizadas_agrup <- cut(deptos$suavizadas,unique(quantile(deptos$suavizadas,probs= c(0,0.2,0.4,0.6,0.8,1)),
+                               dig.lab = 4))
 
 #Formateo los puntos de corte
 
@@ -117,7 +117,7 @@ colores_personalizados <- colorFactor(
 
 
 
-mapa_chagas <-leaflet(deptos) %>%
+mapa_enf <-leaflet(deptos) %>%
   addTiles(urlTemplate = "https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png",
            tileOptions(tms = TRUE,maxZoom = 14),attribution = '<a target="_blank" href="https://www.ign.gob.ar/argenmap/argenmap.jquery/docs/#datosvectoriales" style="color: black; text-decoration: underline; font-weight: normal;">Datos IGN Argentina // OpenStreetMap</a>') %>%
   addPolygons(fill = colores_personalizados(deptos$mean),
@@ -137,7 +137,7 @@ mapa_chagas <-leaflet(deptos) %>%
 
 pal <- RColorBrewer::brewer.pal(5,"Blues")
 
-mapa_chagas <- mapa_chagas %>%
+mapa_enf <- mapa_enf %>%
   addPolygons(fill= deptos$suavizadas_agrup,
               color= pal,
               fillOpacity = 0.7,
@@ -146,12 +146,12 @@ mapa_chagas <- mapa_chagas %>%
               popup = paste0(deptos$departamen,"\n",deptos$suavizadas),
               group= "Suavizadas") %>%
   addLegend(position = "bottomright", # Posición de la leyenda
-            colors = pal, 
+            colors = pal[1:4], 
             labels = labeler(deptos$suavizadas_agrup), 
             title = "RME suavizadas",
             group = "Suavizadas")
 
-mapa_chagas <- mapa_chagas %>%
+mapa_enf <- mapa_enf %>%
   addPolygons(fill = colores_personalizados(deptos$cluster),
               fillColor = colores_personalizados(deptos$cluster),
               fillOpacity = 0.7,
@@ -167,7 +167,7 @@ mapa_chagas <- mapa_chagas %>%
             group = "Cluster Test")
 
 
-mapa_chagas %>%
+mapa_enf %>%
   addLayersControl(
     overlayGroups = c("Suavizadas","Cluster","Cluster Test"),
     position = "bottomleft",

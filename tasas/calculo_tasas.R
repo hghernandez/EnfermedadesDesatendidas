@@ -16,9 +16,13 @@ load("datosMort/data.RData")
 #                                                          #
 ##%######################################################%##
 
+unique(casos$enf_desa_sub)
 
-chagas <- casos %>%
-  filter(grepl("chagas",enf_desa_sub))
+evento <- "11.Equinococosis"
+
+
+enf <- casos %>%
+  filter(enf_desa_sub== evento)
 
 
 ##%######################################################%##
@@ -80,16 +84,16 @@ pob_deptos <- pob_deptos %>%
 names(casos)
 names(pob_deptos)
 
-chagas <- pob_deptos %>%
+enf <- pob_deptos %>%
   filter(ano >= 2004 & ano <= 2018) %>%
-  left_join(chagas, by= c("ano","codprov"="provres","coddep"="depres","sexo","gredad"="edadquinq")) %>%
+  left_join(enf, by= c("ano","codprov"="provres","coddep"="depres","sexo","gredad"="edadquinq")) %>%
   mutate(link= paste0(codprov,coddep)) %>%
   fill(enf_desa_sub,.direction = "downup") %>%
   fill(enf_desa_tot,.direction = "downup")
 
 
 #Seteo los valroes NULL a 0
-chagas[is.na(chagas)] <- 0
+enf[is.na(enf)] <- 0
 
 
 ##%######################################################%##
@@ -101,7 +105,7 @@ chagas[is.na(chagas)] <- 0
 
 #Standar de casos
 
-std =chagas %>%
+std =enf %>%
   filter(gredad != '18.Total')%>%
   group_by(enf_desa_sub,sexo,gredad) %>%
   summarise(casos=sum(casos),
@@ -112,7 +116,7 @@ std =chagas %>%
 #casos
 
 
-chagas_casos <- chagas %>%
+enf_casos <- enf %>%
   filter(gredad != '18.Total')%>%
   group_by(link,enf_desa_sub,sexo,gredad) %>%
   summarise(casos=sum(casos),
@@ -122,20 +126,18 @@ chagas_casos <- chagas %>%
 
 
 
-length(unique(ntd$link))
-
 #Departamentos = 512
 #Sexo= 3
 # Lista de 1536 objetos (512*3)
 
 
-tasas_chagas <- list()
+tasas_enf <- list()
 
 for(i in 1:1536){
   for(j in 1:3){
     
-    tasas_chagas[[i]] <- ageadjust.indirect(count = chagas_casos[(1+17*(i-1)):(17+17*(i-1)),5],
-                                         pop= chagas_casos[(1+17*(i-1)):(17+17*(i-1)),6], 
+    tasas_enf[[i]] <- ageadjust.indirect(count = enf_casos[(1+17*(i-1)):(17+17*(i-1)),5],
+                                         pop= enf_casos[(1+17*(i-1)):(17+17*(i-1)),6], 
                                          stdcount = std[(1+17*(j-1)):(17+17*(j-1)),4], 
                                          stdpop= std[(1+17*(j-1)):(17+17*(j-1)),5],
                                          stdrate = std[(1+17*(j-1)):(17+17*(j-1)),4]/std[(1+17*(j-1)):(17+17*(j-1)),5])
@@ -147,43 +149,43 @@ for(i in 1:1536){
 
 #Guardo las tasas en un data frame
 
-tasas_chagas_df <- as.data.frame(1:1536)
+tasas_enf_df <- as.data.frame(1:1536)
 
-tasas_chagas_df$observados <- 0
-tasas_chagas_df$esperados <- 0
-tasas_chagas_df$RME <- 0
-tasas_chagas_df$ic_inf <- 0
-tasas_chagas_df$ic_sup <- 0
+tasas_enf_df$observados <- 0
+tasas_enf_df$esperados <- 0
+tasas_enf_df$RME <- 0
+tasas_enf_df$ic_inf <- 0
+tasas_enf_df$ic_sup <- 0
 
 
 for(i in 1:1536){
   
-  tasas_chagas_df[i,]$observados <- tasas_chagas[[i]]$sir[1]
-  tasas_chagas_df[i,]$esperados <- tasas_chagas[[i]]$sir[2]
-  tasas_chagas_df[i,]$RME <- tasas_chagas[[i]]$sir[3]*100
-  tasas_chagas_df[i,]$ic_inf <- tasas_chagas[[i]]$sir[4]*100
-  tasas_chagas_df[i,]$ic_sup <- tasas_chagas[[i]]$sir[5]*100
+  tasas_enf_df[i,]$observados <- tasas_enf[[i]]$sir[1]
+  tasas_enf_df[i,]$esperados <- tasas_enf[[i]]$sir[2]
+  tasas_enf_df[i,]$RME <- tasas_enf[[i]]$sir[3]*100
+  tasas_enf_df[i,]$ic_inf <- tasas_enf[[i]]$sir[4]*100
+  tasas_enf_df[i,]$ic_sup <- tasas_enf[[i]]$sir[5]*100
   print(i) 
   
 }
 
 #Agrego el sexo
 
-s <- unique(chagas_casos$sexo)
+s <- unique(enf_casos$sexo)
 
-tasas_chagas_df$sexo <- rep(s,512)
+tasas_enf_df$sexo <- rep(s,512)
 
 #Agrego el link
 
-l <- unique(chagas_casos$link)
+l <- unique(enf_casos$link)
 
-tasas_chagas_df$link <- rep(l,each= 3)
+tasas_enf_df$link <- rep(l,each= 3)
 
 #agrego el evento
 
-tasas_chagas_df[,1] <- "Chagas"
+tasas_enf_df[,1] <- evento
 
-colnames(tasas_chagas_df)[1] <- 'Evento'
+colnames(tasas_enf_df)[1] <- 'Evento'
 
 ##%######################################################%##
 #                                                          #
@@ -191,8 +193,8 @@ colnames(tasas_chagas_df)[1] <- 'Evento'
 #                                                          #
 ##%######################################################%##
 
-save(tasas_chagas_df,file="tasas/tasas_chagas.RData")
-load("tasas/tasas_chagas.RData")
+save(tasas_enf_df,file= paste0("tasas/tasas",substring(evento,4,stringr::str_length(evento)),".RData"))
+load(paste0("tasas/tasas",substring(evento,4,stringr::str_length(evento)),".RData"))
 
 
 ##%######################################################%##
@@ -205,7 +207,7 @@ load("tasas/tasas_chagas.RData")
 #Excluyo antartida y malvinas
 
 
-tasas_chagas_df <- tasas_chagas_df %>%
+tasas_enf_df <- tasas_enf_df %>%
   filter(!link %in% c(94028,94021))
 
 #Cargo la matriz de vecindad
@@ -215,18 +217,18 @@ matriz <- read.gal("matriz de vecindad/matriz")
 
 #Suavizo las tasas
 
-sexo = unique(tasas_chagas_df$sexo)
+sexo = unique(tasas_enf_df$sexo)
 
 for(sexo in sexo){
 
-tasas_chagas_df[tasas_chagas_df$sexo== sexo,9] <- EBlocal(tasas_chagas_df$observados[tasas_chagas_df$sexo== sexo],
-        tasas_chagas_df$esperados[tasas_chagas_df$sexo== sexo],
+tasas_enf_df[tasas_enf_df$sexo== sexo,9] <- EBlocal(tasas_enf_df$observados[tasas_enf_df$sexo== sexo],
+        tasas_enf_df$esperados[tasas_enf_df$sexo== sexo],
         matriz)$est*100
 print(sexo)
 }
 
-colnames(tasas_chagas_df)[9] <- 'suavizadas'
+colnames(tasas_enf_df)[9] <- 'suavizadas'
 
 #Guardo las tasas
 
-save(tasas_chagas_df,file="tasas/tasas_chagas_suav.RData")
+save(tasas_enf_df,file= paste0("tasas/tasas_",substring(evento,4,stringr::str_length(evento)),"_suav.RData"))
