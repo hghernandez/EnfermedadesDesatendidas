@@ -18,7 +18,7 @@ load("datosMort/data.RData")
 
 unique(casos$enf_desa_sub)
 
-evento <- "11.Equinococosis"
+evento <- "18.Lepra"
 
 
 enf <- casos %>%

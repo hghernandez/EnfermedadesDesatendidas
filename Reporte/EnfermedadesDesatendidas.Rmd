@@ -1,0 +1,162 @@
+---
+title: "Enfermedades Desatendidas"
+author: "Mg. Hernan Hernandez"
+subtitle: "Epidemiología. Licenciatura en Nutrición"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "##",
+  fig.width = 10
+)
+
+```
+
+```{r}
+ruta <- "C:/Users/NaranjaX/Documents/Mis Documentos/EnfermedadesDesatendidas/"
+
+load(paste0(ruta,"tasas/tasas_ntd_suav.RData"))
+load(paste0(ruta,"tasas/tasas_02.Leishmaniasis_suav.RData"))
+load(paste0(ruta,"tasas/tasas_chagas_suav.RData"))
+load(paste0(ruta,"tasas/tasas_Equinococosis_suav.RData"))
+load(paste0(ruta,"tasas/tasas_Lepra_suav.RData"))
+
+```
+
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
+```
+
+## ¿Que son las enfermedades desatendidas?
+
+Las ETD comprenden un grupo de **entidades nosológicas** que se
+distinguen por estar directamente relacionadas con **malas condiciones
+de vida** (residentes de zonas rurales remo tas, barrios marginales,
+grupos étnicos relegados o zonas de confl icto), con acceso inadecuado a
+los servicios de salud, la educación, al agua potable y al saneamiento
+básico, y con ambientes tropicales (1-4).
+
+**Aunque la mayoría de esas enfermedades tengan tratamiento y sean
+curables** con medicamentos que cuestan menos de un dólar por dosis o
+son donados a través de la Organización Panamericana de la Salud (OPS),
+el perfil poblacional de los enfermos repercute poco en la agenda de
+prioridades de la salud pública, básicamente por su escasa incidencia en
+las decisiones políticas. Además, la inversión en investigación y
+desarrollo de nuevos y mejores medicamentos es escasa: sólo 4,4% de los
+nue vos productos aprobados entre 2000 y 2011 fueron para ETD, la
+mayoría formulaciones nuevas o combinaciones de drogas ya existentes. La
+ausencia de estadísticas confiables también con tribuye a su reducida
+visibilidad (1,2,5).
+
+-   Este grupo de enfermedades incluye:
+
+-   dengue
+
+-    rabia
+
+-    ceguera por tracoma
+
+-    úlcera de Buruli
+
+-    treponematosis
+
+-    lepra (o enfermedad de Hansen)
+
+-   enfermedad de Chagas
+
+-    leishmaniasis
+
+-    cisticercosis
+
+-    equinococosis o hidatidosis
+
+-    filariasis
+
+-    esquistosomiasis
+
+-    helmintiasis
+
+-    entre otras
+
+### Estadísticas
+
+-   En 2022 había 343 casos de lepra en tratamiento.
+
+## Atecedentes
+
+```{r media_semanal_dengue}
+
+
+
+
+
+```
+
+```{r corredor_dengue}
+
+
+```
+
+::: panelset
+::: panel
+### Fuente de datos {.panel-name}
+
+```{r corredor_dengue_graf}
+
+
+```
+:::
+
+::: panel
+### Resultados {.panel-name}
+
+```{r graf_casos_dengue}
+
+
+
+```
+:::
+:::
+
+## Discusión
+
+Este evento de vigilancia epidemiológica agrupa a: **ETI (Enfermedad
+Tipo Influenza)**, **Neumonía**, **Bronquiolitis en menores de 2 años**
+e **Infección respiratoria aguda internada (IRAG)**.
+
+```{r media_semanal_ira}
+
+
+
+```
+
+```{r corredor_ira}
+
+
+```
+
+::: panelset
+::: panel
+### Conclusiones {.panel-name}
+
+```{r corredor_ira_graf}
+
+```
+:::
+
+::: panel
+### Casos IRA por año {.panel-name}
+
+```{r graf_ira}
+
+
+```
+:::
+:::
