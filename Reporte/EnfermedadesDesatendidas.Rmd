@@ -59,47 +59,115 @@ visibilidad (1,2,5).
 
 -   dengue
 
--    rabia
+-   rabia
 
--    ceguera por tracoma
+-   ceguera por tracoma
 
--    úlcera de Buruli
+-   úlcera de Buruli
 
--    treponematosis
+-   treponematosis
 
--    lepra (o enfermedad de Hansen)
+-   lepra (o enfermedad de Hansen)
 
 -   enfermedad de Chagas
 
--    leishmaniasis
+-   leishmaniasis
 
--    cisticercosis
+-   cisticercosis
 
--    equinococosis o hidatidosis
+-   equinococosis o hidatidosis
 
--    filariasis
+-   filariasis
 
--    esquistosomiasis
+-   esquistosomiasis
 
--    helmintiasis
+-   helmintiasis
 
--    entre otras
+-   entre otras
 
-### Estadísticas
+### Estadísticas Argentina (fuente: <https://www.who.int/data/gho/data/themes/topics/soil-transmitted-helminthiases>)
 
--   En 2022 había 343 casos de lepra en tratamiento.
+-   En 2022 había 343 casos de lepra en tratamiento y 142 casos nuevos
+    registrados.
+-   128 casos de leishmanianiasis (en cualquiera de sus formas)
+-   
 
 ## Atecedentes
 
-```{r media_semanal_dengue}
+[![Ejemplo](articuloprevio.png)](https://iris.paho.org/bitstream/handle/10665.2/51493/v43e672019.pdf?sequence=1&isAllowed=y)
 
+## Metodología
 
+-   Estudio ecológico transversal, tomando los departamentos de la
+    Argentina como unidad de análisis. Excepto Ciudad de Buenos Aires
+    que se la tomo como una unidad dado que la organización politica es
+    incompatible (circunscripción electoral vs comunas).
 
+-   Período 2004-2018, ambos sexos (suma varones, mujeres y sin
+    definición).
 
+-   Se calcularon:
 
+    -   Las razones de mortalidad estandarizadas (RME) tomando como
+        referencia la tasas específicas por edad para ambos sexos de
+        Argentina.
+
+        $Muertes esperadas=∑i​Ei​$
+
+    -   Las RME fueron suavizadas mediante metodo Bayesiano Local: el
+        bjetivo es "pesar" la información del área que nos interesa; es
+        decir, ponderar los datos de mortalidad de una determinada área
+        junto con la información sobre la distribución de la mortalidad
+        del resto de las áreas y/o de un conjunto de ellas (áreas
+        adyacentes)
+
+    -   Análisis Espacial e identificación de clúster: este metodo
+        método (también llamado LISA Indicadores Locales de Asociación
+        Espacial) descompone el índice I de Moran y verifica en cuánto
+        contribuye cada unidad espacial a la formación del valor
+        general, permitiendo obtener un valor de significancia para cada
+        cluster formado por los valores similares de cada unidad
+        espacial y sus vecinos. Estos agrupamientos o clusters de
+        especial concentración de valores extremos de una variable se
+        conocen también como zonas calientes/frías (hot spots/cold
+        spots, respectivamente) según se trate de una concentración de
+        valores especialmente altos/bajos de una variable,
+        correspondientemente.
+
+    Si tomamos los valores de una unidad espacial y la de sus vecinos y
+    comparamos ambos con los valores medios (de la unidad y del vecino),
+    podemos obtener:
+
+    +--------------+--------------+
+    | Bajo en X    | Alto en X    |
+    |              |              |
+    | Alto en Y    | Alto en Y    |
+    +:============:+:============:+
+    | **Bajo en    | **Alto en    |
+    | X**          | X**          |
+    |              |              |
+    | **Bajo en    | **Bajo en    |
+    | Y**          | Y**          |
+    +--------------+--------------+
+
+    : **Moran Scatterplot**
+
+## Matriz de vecindad para la Argentina por departamentos
+
+```{r, echo=FALSE, out.width="75%"}
+knitr::include_graphics("MatrizdeVencidadImagen.png")
 ```
 
+## Fuente de datos
+
+Dirección Estadística de Información de Salud (DEIS)
+
+![¿Cómo se genera la información de mortalidad?](CircuitoDefuncion.png)
+
+![¿Qué es el Informe Estadístico de Defunción?](ModeloIED.png)
+
 ```{r corredor_dengue}
+
 
 
 ```
