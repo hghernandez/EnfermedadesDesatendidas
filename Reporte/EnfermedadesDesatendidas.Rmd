@@ -138,17 +138,17 @@ visibilidad (1,2,5).
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +--------------+--------------+
-    | Bajo en X    | Alto en X    |
-    |              |              |
-    | Alto en Y    | Alto en Y    |
-    +:============:+:============:+
-    | **Bajo en    | **Alto en    |
-    | X**          | X**          |
-    |              |              |
-    | **Bajo en    | **Bajo en    |
-    | Y**          | Y**          |
-    +--------------+--------------+
+    +-------------+-------------+
+    | Bajo en X   | Alto en X   |
+    |             |             |
+    | Alto en Y   | Alto en Y   |
+    +:===========:+:===========:+
+    | **Bajo en   | **Alto en   |
+    | X**         | X**         |
+    |             |             |
+    | **Bajo en   | **Bajo en   |
+    | Y**         | Y**         |
+    +-------------+-------------+
 
     : **Moran Scatterplot**
 
@@ -166,26 +166,43 @@ Dirección Estadística de Información de Salud (DEIS)
 
 ![¿Qué es el Informe Estadístico de Defunción?](ModeloIED.png)
 
-```{r corredor_dengue}
 
-
-
-```
+## Resultados
 
 ::: panelset
 ::: panel
-### Fuente de datos {.panel-name}
+### Total NTD {.panel-name}
 
-```{r corredor_dengue_graf}
+```{r map_total_ntd}
 
 
 ```
 :::
 
 ::: panel
-### Resultados {.panel-name}
+### Lepra {.panel-name}
 
-```{r graf_casos_dengue}
+```{r map_lepra}
+
+
+
+```
+:::
+
+::: panel
+### Leishmaniasis {.panel-name}
+
+```{r map_leishmaniasis}
+
+
+
+```
+:::
+
+::: panel
+### Equinococosis {.panel-name}
+
+```{r map_equinococosis}
 
 
 
