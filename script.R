@@ -67,8 +67,8 @@ dataset <- dataset %>%
          uniedad == 1 & edad > 34 & edad <= 39 ~ '08.35-39',
          uniedad == 1 & edad > 39 & edad <= 44 ~ '09.40-44',
          uniedad == 1 & edad > 44 & edad <= 49 ~ '10.45-49',
-         uniedad == 1 & edad > 49 & edad <= 54 ~ '11.49-54',
-         uniedad == 1 & edad > 54 & edad <= 59 ~ '12.54-59',
+         uniedad == 1 & edad > 49 & edad <= 54 ~ '11.50-54',
+         uniedad == 1 & edad > 54 & edad <= 59 ~ '12.55-59',
          uniedad == 1 & edad > 59 & edad <= 64 ~ '13.60-64',
          uniedad == 1 & edad > 64 & edad <= 69 ~ '14.65-69',
          uniedad == 1 & edad > 69 & edad <= 74 ~ '15.70-74',
@@ -229,7 +229,83 @@ casos <- casos %>%
 save(casos, file="datosMort/data.RData")
 load("datosMort/data.RData")
 
+distr_edad <- casos %>%
+  filter(sexo != '3.Ambos sexos' & edadquinq != '18.Total') %>%
+  group_by(edadquinq,sexo) %>%
+  summarise(n= n()) %>%
+  arrange(sexo)
+
+ggplot(distr_edad,aes(x= edadquinq, fill= sexo ,y= ifelse(sexo== '1.Varones',n,-n)))+
+  geom_bar(stat= 'identity')+
+  scale_y_continuous(
+    labels = abs, 
+    limits = max(distr_edad$n) * c(-1,1)
+  ) + 
+  scale_fill_manual(values=c("#E6F5D0","#F1B6DA"),labels=c("Varones","Mujeres"))+
+  scale_x_discrete(labels= substring(distr_edad$edadquinq,4,str_length(distr_edad$edadquinq)))+
+  coord_flip() + 
+  theme_minimal() +
+  labs(
+    x = "Edad Quinquenal", 
+    y = "Casos", 
+    fill = "Sexo", 
+    title = "Distribución de los casos por edad"
+  )
+  
+poblacion <- R.utils::loadObject("PoblacionesEstimadas/pobdeptos0125.Rbin")
+
+
+fix_length <- function(x,y){
+  
+  x <- as.numeric(substring(x,1,2))
+  
+  x <- ifelse(x < 10,paste0('0',y),
+              ifelse(x == 17,"17.80 y +",
+                     ifelse(x== 11,"11.50-54",
+                            ifelse(x== 12,"12.55-59",as.character(y)))))
+  
+
+  return(x)
+  
+  
+}
+
+
+pob_agrup <- poblacion %>%
+  filter(ano >= 2004 & ano <= 2018)%>%
+  mutate(gredad = fix_length(gredad,gredad)) %>%
+  group_by(ano,gredad,sexo)%>%
+  summarise(poblacion= sum(poblacion))
+
+unique(poblacion$gredad)
+
+tasas_esp <- casos %>%
+  group_by(ano,edadquinq,sexo) %>%
+  summarise(casos= n()) %>%
+  left_join(pob_agrup,by= c("ano","edadquinq"="gredad","sexo")) %>%
+  group_by(edadquinq,sexo)%>%
+  summarise(casos= sum(casos),
+            poblacion= sum(poblacion))%>%
+  mutate(tasa= casos*1000000/poblacion) 
 
 
 
+conf_interval <- function(d,p){
+  
+  li= d*((1 -(1/(9*d)) - (1.96/3)* sqrt(1/d)))^3/p
+  ls= (d+1) * ((1 - (1/(9*(d+1))) + (1.96/3) * sqrt(1/(d+1))))^3 / p
+  
+  return(c(li,ls))
+
+  
+}
+
+
+for(i in 1:nrow(tasas_esp)){
+tasas_esp[i,6] <- conf_interval(tasas_esp$casos[i],tasas_esp$poblacion[i])[1]*1000000
+tasas_esp[i,7] <- conf_interval(tasas_esp$casos[i],tasas_esp$poblacion[i])[2]*1000000 
+}  
+
+colnames(tasas_esp)[6] <- "IC_inf"
+colnames(tasas_esp)[7] <- "IC_sup" 
 
