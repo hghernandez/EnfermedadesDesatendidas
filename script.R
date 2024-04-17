@@ -230,16 +230,16 @@ save(casos, file="datosMort/data.RData")
 load("datosMort/data.RData")
 
 distr_edad <- casos %>%
-  filter(sexo != '3.Ambos sexos' & edadquinq != '18.Total') %>%
+  filter(sexo != '3.Ambos sexos' & edadquinq != '18.Total' & enf_desa_sub == '30.Total NTD') %>%
   group_by(edadquinq,sexo) %>%
-  summarise(n= n()) %>%
+  summarise(casos= sum(casos)) %>%
   arrange(sexo)
 
-ggplot(distr_edad,aes(x= edadquinq, fill= sexo ,y= ifelse(sexo== '1.Varones',n,-n)))+
+ggplot(distr_edad,aes(x= edadquinq, fill= sexo ,y= ifelse(sexo== '1.Varones',casos,-casos)))+
   geom_bar(stat= 'identity')+
   scale_y_continuous(
     labels = abs, 
-    limits = max(distr_edad$n) * c(-1,1)
+    limits = max(distr_edad$casos) * c(-1,1)
   ) + 
   scale_fill_manual(values=c("#E6F5D0","#F1B6DA"),labels=c("Varones","Mujeres"))+
   scale_x_discrete(labels= substring(distr_edad$edadquinq,4,str_length(distr_edad$edadquinq)))+
@@ -280,8 +280,9 @@ pob_agrup <- poblacion %>%
 unique(poblacion$gredad)
 
 tasas_esp <- casos %>%
+  filter(enf_desa_sub == '30.Total NTD') %>%
   group_by(ano,edadquinq,sexo) %>%
-  summarise(casos= n()) %>%
+  summarise(casos= sum(casos)) %>%
   left_join(pob_agrup,by= c("ano","edadquinq"="gredad","sexo")) %>%
   group_by(edadquinq,sexo)%>%
   summarise(casos= sum(casos),
@@ -309,3 +310,30 @@ tasas_esp[i,7] <- conf_interval(tasas_esp$casos[i],tasas_esp$poblacion[i])[2]*10
 colnames(tasas_esp)[6] <- "IC_inf"
 colnames(tasas_esp)[7] <- "IC_sup" 
 
+
+ggplot(tasas_esp %>% filter(edadquinq != '18.Total'),
+       aes(x= edadquinq, y= tasa, color= sexo))+
+  geom_point()+
+  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup))+
+  scale_x_discrete(labels= substring(distr_edad$edadquinq,4,str_length(distr_edad$edadquinq)))+
+  scale_color_manual(values=c("#7FBC41","#F1B6DA","#8E0152"),labels=c("Varones","Mujeres","Ambos sexos"))+
+  labs(x= "Edad Agrupada", y= "Tasa de mortalidad \n (por 1 millon de hab.)",
+       color= "Sexo")
+
+
+ggplot(tasas_esp %>% filter(edadquinq == '18.Total'),
+       aes(x= sexo, y= tasa, color= sexo))+
+  geom_point()+
+  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup))+
+  scale_x_discrete(labels=c("Varones","Mujeres","Ambos sexos"))+
+  scale_color_manual(values=c("#7FBC41","#F1B6DA","#8E0152"),labels=c("Varones","Mujeres","Ambos sexos"))+
+  labs(x= "Edad Agrupada", y= "Tasa de mortalidad \n (por 1 millon de hab.)",
+       color= "Sexo")
+
+
+save(distr_edad,file="Reporte/piramide.RData")
+save(tasas_esp,file="Reporte/tasas_esp.RData")
+
+round(tasas_esp$casos[tasas_esp$sexo== '2.Mujeres' & tasas_esp$edadquinq == '18.Total']*100/tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'])
+
+scales::comma(tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")

@@ -20,6 +20,11 @@ knitr::opts_chunk$set(
 ```
 
 ```{r}
+library(tidyverse)
+```
+
+
+```{r}
 ruta <- "C:/Users/NaranjaX/Documents/Mis Documentos/EnfermedadesDesatendidas/"
 
 load(paste0(ruta,"tasas/tasas_ntd_suav.RData"))
@@ -27,6 +32,8 @@ load(paste0(ruta,"tasas/tasas_02.Leishmaniasis_suav.RData"))
 load(paste0(ruta,"tasas/tasas_chagas_suav.RData"))
 load(paste0(ruta,"tasas/tasas_Equinococosis_suav.RData"))
 load(paste0(ruta,"tasas/tasas_Lepra_suav.RData"))
+load(paste0(ruta,"Reporte/tasas_esp.RData"))
+load(paste0(ruta,"Reporte/piramide.RData"))
 
 ```
 
@@ -168,6 +175,77 @@ Dirección Estadística de Información de Salud (DEIS)
 
 
 ## Resultados
+
+### Descripción de la muestra
+
+En el período de estudio (2004-2018), se registraron `r scales::comma(tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`defunciones por Enfermedades Desatendidas, de las cuáles `r round(tasas_esp$casos[tasas_esp$sexo== '1.Varones' & tasas_esp$edadquinq == '18.Total']*100/tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'])`% (`r scales::comma(tasas_esp$casos[tasas_esp$sexo== '1.Varones' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`) se dieron en varones y `r round(tasas_esp$casos[tasas_esp$sexo== '2.Mujeres' & tasas_esp$edadquinq == '18.Total']*100/tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'])`% (`r scales::comma(tasas_esp$casos[tasas_esp$sexo== '2.Mujeres' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`) en mujeres.
+
+
+::: panelset
+::: panel
+### Distribución de las defunciones por edad {.panel-name}
+
+```{r piramide_edad}
+ggplot(distr_edad,aes(x= edadquinq, fill= sexo ,y= ifelse(sexo== '1.Varones',casos,-casos)))+
+  geom_bar(stat= 'identity')+
+  scale_y_continuous(
+    labels = abs, 
+    limits = max(distr_edad$casos) * c(-1,1)
+  ) + 
+  scale_fill_manual(values=c("#E6F5D0","#F1B6DA"),labels=c("Varones","Mujeres"))+
+  scale_x_discrete(labels= substring(distr_edad$edadquinq,4,str_length(distr_edad$edadquinq)))+
+  coord_flip() + 
+  theme_minimal() +
+  labs(
+    x = "Edad Quinquenal", 
+    y = "Casos", 
+    fill = "Sexo", 
+    title = "Distribución de los casos por edad"
+  )
+
+```
+:::
+
+::: panel
+### Tasas específicas por edad {.panel-name}
+```{r tasas_especificas_edad}
+ggplot(tasas_esp %>% filter(edadquinq != '18.Total'),
+       aes(x= edadquinq, y= tasa, color= sexo))+
+  geom_point()+
+  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup))+
+  scale_x_discrete(labels= substring(distr_edad$edadquinq,4,str_length(distr_edad$edadquinq)))+
+  scale_color_manual(values=c("#7FBC41","#F1B6DA","#8E0152"),labels=c("Varones","Mujeres","Ambos sexos"))+
+  labs(x= "Edad Agrupada", y= "Tasa de mortalidad \n (por 1 millon de hab.)",
+       color= "Sexo")
+
+```
+
+:::
+
+::: panel
+### Tasas específicas por sexo {.panel-name}
+
+```{r tasas_especificas_sexo}
+ggplot(tasas_esp %>% filter(edadquinq == '18.Total'),
+       aes(x= sexo, y= tasa, color= sexo))+
+  geom_point()+
+  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup))+
+  scale_x_discrete(labels=c("Varones","Mujeres","Ambos sexos"))+
+  scale_color_manual(values=c("#7FBC41","#F1B6DA","#8E0152"),labels=c("Varones","Mujeres","Ambos sexos"))+
+  labs(x= "Edad Agrupada", y= "Tasa de mortalidad \n (por 1 millon de hab.)",
+       color= "Sexo")
+
+```
+:::
+
+:::
+
+
+
+
+
+
+
 
 ::: panelset
 ::: panel

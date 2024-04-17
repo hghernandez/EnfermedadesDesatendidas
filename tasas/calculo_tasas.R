@@ -6,8 +6,6 @@ library(epitools)
 library(spdep)
 
 
-
-
 load("datosMort/data.RData")
 
 ##%######################################################%##
@@ -18,7 +16,7 @@ load("datosMort/data.RData")
 
 unique(casos$enf_desa_sub)
 
-evento <- "18.Lepra"
+evento <- "11.Equinococosis"
 
 
 enf <- casos %>%
