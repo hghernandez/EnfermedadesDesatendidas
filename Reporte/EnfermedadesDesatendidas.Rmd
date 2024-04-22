@@ -3,6 +3,7 @@ title: "Enfermedades Desatendidas"
 author: "Mg. Hernan Hernandez"
 subtitle: "Epidemiología. Licenciatura en Nutrición"
 output: html_document
+bibliography: reference.bib
 editor_options: 
   markdown: 
     wrap: 72
@@ -23,15 +24,10 @@ knitr::opts_chunk$set(
 library(tidyverse)
 ```
 
-
 ```{r}
 ruta <- "C:/Users/NaranjaX/Documents/Mis Documentos/EnfermedadesDesatendidas/"
 
-load(paste0(ruta,"tasas/tasas_ntd_suav.RData"))
-load(paste0(ruta,"tasas/tasas_02.Leishmaniasis_suav.RData"))
-load(paste0(ruta,"tasas/tasas_chagas_suav.RData"))
-load(paste0(ruta,"tasas/tasas_Equinococosis_suav.RData"))
-load(paste0(ruta,"tasas/tasas_Lepra_suav.RData"))
+
 load(paste0(ruta,"Reporte/tasas_esp.RData"))
 load(paste0(ruta,"Reporte/piramide.RData"))
 
@@ -48,7 +44,8 @@ distinguen por estar directamente relacionadas con **malas condiciones
 de vida** (residentes de zonas rurales remo tas, barrios marginales,
 grupos étnicos relegados o zonas de confl icto), con acceso inadecuado a
 los servicios de salud, la educación, al agua potable y al saneamiento
-básico, y con ambientes tropicales (1-4).
+básico, y con ambientes tropicales
+([@OMS2017],[@OMS2010],[@OMS2013],[@OPS2016]).
 
 **Aunque la mayoría de esas enfermedades tengan tratamiento y sean
 curables** con medicamentos que cuestan menos de un dólar por dosis o
@@ -60,7 +57,7 @@ desarrollo de nuevos y mejores medicamentos es escasa: sólo 4,4% de los
 nue vos productos aprobados entre 2000 y 2011 fueron para ETD, la
 mayoría formulaciones nuevas o combinaciones de drogas ya existentes. La
 ausencia de estadísticas confiables también con tribuye a su reducida
-visibilidad (1,2,5).
+visibilidad ([@OMS2010],[@OPS2016],[@WirtzVJetal.2016]).
 
 -   Este grupo de enfermedades incluye:
 
@@ -92,12 +89,41 @@ visibilidad (1,2,5).
 
 -   entre otras
 
-### Estadísticas Argentina (fuente: <https://www.who.int/data/gho/data/themes/topics/soil-transmitted-helminthiases>)
+### Estadísticas Argentina
 
--   En 2022 había 343 casos de lepra en tratamiento y 142 casos nuevos
-    registrados.
--   128 casos de leishmanianiasis (en cualquiera de sus formas)
--   
+-   Lepra:
+
+    -   En 2022 había 343 casos de lepra en tratamiento y 142 casos
+        nuevos registrados [@OMS2024].
+
+-   Leishmaniasis:
+
+    -   128 casos de leishmanianiasis (en cualquiera de sus formas)
+        [@OMS2024].
+
+-   Enfermedad de Chagas
+
+    -   En Argentina se calcula que cerca de un millón y medio de
+        personas tienen Chagas [@Msal2022].
+
+    -   A 2022, en 9 provincias existe transmisión vectorial de la
+        Enfermedad de Chagas [@Msal2022].
+
+    -   La transmision vertical (materno infantil) es en la actualidad
+        el principal mecanismo de transmisión en nuestro país
+        [@Msal2022].
+
+    -   En el período 2019-2021 para el evento Chagas congénito/vertical
+        con diagnóstico confirmatorio, se notificó el inicio del
+        tratamiento en el 25% para el 2019, y en el 34% para los años
+        2020 y 2021 [@Msal2022].
+
+    -   Más del 80% de los casos reportados como "Chagas Agudo
+        Congénito/Vertical" no registra el diagnóstico completo que
+        permita confirmar o descartar la infección por T. cruzi
+        [@Msal2022].
+
+-   Equinocococis
 
 ## Atecedentes
 
@@ -145,17 +171,17 @@ visibilidad (1,2,5).
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +-------------+-------------+
-    | Bajo en X   | Alto en X   |
-    |             |             |
-    | Alto en Y   | Alto en Y   |
-    +:===========:+:===========:+
-    | **Bajo en   | **Alto en   |
-    | X**         | X**         |
-    |             |             |
-    | **Bajo en   | **Bajo en   |
-    | Y**         | Y**         |
-    +-------------+-------------+
+    +-----------+-----------+
+    | Bajo en X | Alto en X |
+    |           |           |
+    | Alto en Y | Alto en Y |
+    +:=========:+:=========:+
+    | **Bajo en | **Alto en |
+    | X**       | X**       |
+    |           |           |
+    | **Bajo en | **Bajo en |
+    | Y**       | Y**       |
+    +-----------+-----------+
 
     : **Moran Scatterplot**
 
@@ -173,13 +199,19 @@ Dirección Estadística de Información de Salud (DEIS)
 
 ![¿Qué es el Informe Estadístico de Defunción?](ModeloIED.png)
 
-
 ## Resultados
 
 ### Descripción de la muestra
 
-En el período de estudio (2004-2018), se registraron `r scales::comma(tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`defunciones por Enfermedades Desatendidas, de las cuáles `r round(tasas_esp$casos[tasas_esp$sexo== '1.Varones' & tasas_esp$edadquinq == '18.Total']*100/tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'])`% (`r scales::comma(tasas_esp$casos[tasas_esp$sexo== '1.Varones' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`) se dieron en varones y `r round(tasas_esp$casos[tasas_esp$sexo== '2.Mujeres' & tasas_esp$edadquinq == '18.Total']*100/tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'])`% (`r scales::comma(tasas_esp$casos[tasas_esp$sexo== '2.Mujeres' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`) en mujeres.
-
+En el período de estudio (2004-2018), se registraron
+`r scales::comma(tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`defunciones
+por Enfermedades Desatendidas, de las cuáles
+`r round(tasas_esp$casos[tasas_esp$sexo== '1.Varones' & tasas_esp$edadquinq == '18.Total']*100/tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'])`%
+(`r scales::comma(tasas_esp$casos[tasas_esp$sexo== '1.Varones' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`)
+se dieron en varones y
+`r round(tasas_esp$casos[tasas_esp$sexo== '2.Mujeres' & tasas_esp$edadquinq == '18.Total']*100/tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'])`%
+(`r scales::comma(tasas_esp$casos[tasas_esp$sexo== '2.Mujeres' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")`)
+en mujeres.
 
 ::: panelset
 ::: panel
@@ -208,6 +240,7 @@ ggplot(distr_edad,aes(x= edadquinq, fill= sexo ,y= ifelse(sexo== '1.Varones',cas
 
 ::: panel
 ### Tasas específicas por edad {.panel-name}
+
 ```{r tasas_especificas_edad}
 ggplot(tasas_esp %>% filter(edadquinq != '18.Total'),
        aes(x= edadquinq, y= tasa, color= sexo))+
@@ -219,7 +252,6 @@ ggplot(tasas_esp %>% filter(edadquinq != '18.Total'),
        color= "Sexo")
 
 ```
-
 :::
 
 ::: panel
@@ -237,15 +269,7 @@ ggplot(tasas_esp %>% filter(edadquinq == '18.Total'),
 
 ```
 :::
-
 :::
-
-
-
-
-
-
-
 
 ::: panelset
 ::: panel
@@ -323,3 +347,9 @@ e **Infección respiratoria aguda internada (IRAG)**.
 ```
 :::
 :::
+
+## Bibliografia
+
+```         
+<div id="refs"></div>
+```

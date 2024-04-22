@@ -6,7 +6,13 @@ library(epitools)
 library(spdep)
 library(leaflet)
 
-load(file="tasas/tasas_Equinococosis_suav.RData")
+files <- list.files("tasas")
+
+files <- files[grepl(pattern = "suav",files)]
+
+load(paste0("tasas/",files[1]))
+
+
 
 ##%######################################################%##
 #                                                          #
@@ -74,13 +80,18 @@ deptos <- deptos %>%
 #Agrego los datos de ambos sexos
 
 
-deptos <- deptos %>%
+tasas_enf_df <- deptos %>%
   left_join(tasas_enf_df %>% filter(grepl("3.",sexo)) %>% select(link,RME,suavizadas,mean,cluster))
 
 #Calculo los quintiles 
 
-deptos$suavizadas_agrup <- cut(deptos$suavizadas,unique(quantile(deptos$suavizadas,probs= c(0,0.2,0.4,0.6,0.8,1)),
-                               dig.lab = 4))
+tasas_enf_df$suavizadas_agrup <- cut(tasas_enf_df$suavizadas,
+                               c(round(unique(quantile(tasas_enf_df$suavizadas, probs = c(0, 0.2, 0.4, 0.6, 0.8),names = FALSE)), 2),Inf),
+                               dig.lab = 6, include.lowest = TRUE,right = TRUE)
+
+#Guardo el archivo
+
+save(tasas_enf_df,file= paste0("Reporte/mapa_",gsub("\\.RData$","",files[1]),".RData"))
 
 #Formateo los puntos de corte
 
@@ -107,6 +118,11 @@ labeler <- function(labels){
   return(levels(factor(labels,levels = levels)))
 }
 
+#Armo el popup
+depto_popup <- paste0("<strong>Departamento: </strong>", 
+                      deptos$departamen, 
+                      "<br><strong>RME Suavizadas: </strong>", 
+                      round(deptos$suavizadas,2))
 
 #Armo los mapas
 
@@ -125,29 +141,37 @@ mapa_enf <-leaflet(deptos) %>%
               fillOpacity = 0.7,
               stroke = TRUE,
               weight = 1,
-              color = "grey",
+              color = "#BDBDC3",
               popup = paste0(deptos$departamen,"\n",deptos$mean),
-              group= "Cluster") %>%
+              group= "Cluster",
+              highlight = highlightOptions(color = "white",
+                                           weight = 2,
+                                           bringToFront = TRUE)) %>%
   addLegend(position = "bottomright", # Posición de la leyenda
             colors = c("red", "blue", "lightpink", "skyblue2", "white"), 
             labels = c("High-High", "Low-Low", "High-Low", "Low-High", "no significativo"), 
             title = "Cluster",
             group = "Cluster")
 
+n <- length(levels(deptos$suavizadas_agrup))
 
-pal <- RColorBrewer::brewer.pal(5,"Blues")
+pal <- colorFactor("BuPu",domain = deptos$suavizadas_agrup)
 
 mapa_enf <- mapa_enf %>%
   addPolygons(fill= deptos$suavizadas_agrup,
-              color= pal,
+              color= ~pal(deptos$suavizadas_agrup),
               fillOpacity = 0.7,
               stroke = FALSE,
               weight = 1,
-              popup = paste0(deptos$departamen,"\n",deptos$suavizadas),
-              group= "Suavizadas") %>%
+              popup = depto_popup,
+              group= "Suavizadas",
+              highlight = highlightOptions(color = "white",
+                                           weight = 2,
+                                           bringToFront = TRUE)) %>%
   addLegend(position = "bottomright", # Posición de la leyenda
-            colors = pal[1:4], 
-            labels = labeler(deptos$suavizadas_agrup), 
+            pal = pal, 
+            values = deptos$suavizadas_agrup,
+            labels = labeler(deptos$suavizadas_agrup),
             title = "RME suavizadas",
             group = "Suavizadas")
 
