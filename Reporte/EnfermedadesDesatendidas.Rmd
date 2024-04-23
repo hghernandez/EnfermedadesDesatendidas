@@ -127,7 +127,8 @@ visibilidad ([@OMS2010],[@OPS2016],[@WirtzVJetal.2016]).
 
 ## Atecedentes
 
-[![Ejemplo](articuloprevio.png)](https://iris.paho.org/bitstream/handle/10665.2/51493/v43e672019.pdf?sequence=1&isAllowed=y)
+[![Enfermedades Desatendidas
+Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/handle/10665.2/51493/v43e672019.pdf?sequence=1&isAllowed=y)
 
 ## Metodología
 
@@ -171,17 +172,19 @@ visibilidad ([@OMS2010],[@OPS2016],[@WirtzVJetal.2016]).
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +-----------+-----------+
-    | Bajo en X | Alto en X |
-    |           |           |
-    | Alto en Y | Alto en Y |
-    +:=========:+:=========:+
-    | **Bajo en | **Alto en |
-    | X**       | X**       |
-    |           |           |
-    | **Bajo en | **Bajo en |
-    | Y**       | Y**       |
-    +-----------+-----------+
+    +--------+--------+
+    | Bajo   | Alto   |
+    | en X   | en X   |
+    |        |        |
+    | Alto   | Alto   |
+    | en Y   | en Y   |
+    +:======:+:======:+
+    | **Bajo | **Alto |
+    | en X** | en X** |
+    |        |        |
+    | **Bajo | **Bajo |
+    | en Y** | en Y** |
+    +--------+--------+
 
     : **Moran Scatterplot**
 
@@ -193,11 +196,32 @@ knitr::include_graphics("MatrizdeVencidadImagen.png")
 
 ## Fuente de datos
 
-Dirección Estadística de Información de Salud (DEIS)
+¿Cómo se genera la información de mortalidad?
 
-![¿Cómo se genera la información de mortalidad?](CircuitoDefuncion.png)
+[![Flujo
+IED](CircuitoDefuncion.png)](https://www.argentina.gob.ar/salud/deis)
 
-![¿Qué es el Informe Estadístico de Defunción?](ModeloIED.png)
+¿Qué es el Informe Estadístico de Defunción?
+
+![IED Mod Internacional](ModeloIED.png)
+
+¿Que es la CIE?
+
+::: {style="display: grid; grid-template-columns: 1fr 1fr; grid-column-gap: 10px; "}
+<div>
+
+![](FliaClasificaciones.png)
+
+</div>
+
+<div>
+
+[![](CIE-10.png)](https://ais.paho.org/classifications/chapters/)
+
+</div>
+:::
+
+<br>
 
 ## Resultados
 
