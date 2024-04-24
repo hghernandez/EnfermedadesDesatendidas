@@ -172,19 +172,31 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +--------+--------+
-    | Bajo   | Alto   |
-    | en X   | en X   |
-    |        |        |
-    | Alto   | Alto   |
-    | en Y   | en Y   |
-    +:======:+:======:+
-    | **Bajo | **Alto |
-    | en X** | en X** |
-    |        |        |
-    | **Bajo | **Bajo |
-    | en Y** | en Y** |
-    +--------+--------+
+    +------+------+
+    | Bajo | Alto |
+    | en X | en X |
+    |      |      |
+    | Alto | Alto |
+    | en Y | en Y |
+    +:====:+:====:+
+    | -    | -    |
+    |   \* |   \* |
+    | Bajo | Alto |
+    |      |      |
+    |   en |   en |
+    |      |      |
+    |    X |    X |
+    | \*\* | \*\* |
+    |      |      |
+    | -    | -    |
+    |   \* |   \* |
+    | Bajo | Bajo |
+    |      |      |
+    |   en |   en |
+    |      |      |
+    |    Y |    Y |
+    | \*\* | \*\* |
+    +------+------+
 
     : **Moran Scatterplot**
 
@@ -338,39 +350,56 @@ ggplot(tasas_esp %>% filter(edadquinq == '18.Total'),
 
 ## Discusión
 
-Este evento de vigilancia epidemiológica agrupa a: **ETI (Enfermedad
-Tipo Influenza)**, **Neumonía**, **Bronquiolitis en menores de 2 años**
-e **Infección respiratoria aguda internada (IRAG)**.
+Los resultados de este estudio muestran una fuerte relación entre la
+mortalidad por ETD y el sexo y la edad. En el período estudiado, más de
+la mitad de los fallecidos por ETD fueron hombres:
 
-```{r media_semanal_ira}
+-   Otros autores lo atribuyen al hecho de que los hombres son menos
+    propensos a buscar tratamiento temprano (30,31)
 
+-   Mayor tiempo de exposición en sus actividades laborales (32)
 
+-   En Argentina, las mujeres refieren peores estados de salud
+    autopercibidos que los hombres, lo que puede influir en la búsqueda
+    de atención (33,34).
 
-```
+La distribución espacial de las ETD, a excepción de la equinococosis,
+muestra mayor riesgo de mortalidad, en el noroeste y el noreste de
+Argentina:
 
-```{r corredor_ira}
+-   La asociación entre pobreza, urbanización y ETD ha sido analizada
+    por diversos investigadores (1,30,31,35).
 
+-   En las provincias que integran estas regiones se detectan los
+    porcentajes medios de hogares con necesidades básicas insatisfechas
+    (que miden condiciones materiales de vida) de 25% en 2001 y de 17%
+    en 2010, 1,8 veces más altos que el porcentaje nacional (36).
 
-```
+-   La mayor mortalidad por equinococis en la patagonia, podría estar
+    relacionado con el hecho de que en esta zona se concentra la
+    producción ovina del país y a que el autoconsumo tiene valores
+    mayores que la media nacional (1,37,38)
 
-::: panelset
-::: panel
-### Conclusiones {.panel-name}
+¿Que podemos decir desde las "dimensiones del campo de salud?
 
-```{r corredor_ira_graf}
+Zabala sostiene que "[...] la enfermedad de Chagas no ha sido tan
+olvidada como para desaparecer de la agenda, ni tan recordada como para
+cortar definitivamente su ciclo de reproducción" (42).
 
-```
-:::
+### Limitaciones
 
-::: panel
-### Casos IRA por año {.panel-name}
-
-```{r graf_ira}
-
-
-```
-:::
-:::
+-   El análisis de la mortalidad por ETD como causa básica presenta
+    algunas limitaciones, como la subestimación y el subregistro
+    (30,31,46). Si el médico que registra la defunción selecciona como
+    causa básica las consecuencias de las ETD, la mortalidad se verá
+    subestimada. Un estudio sobre mortalidad por enfermedad de Chagas
+    según causas múltiples realizado en Saõ Paulo (Brasil) entre 1985 y
+    2006 mostró que cuando ésta es la causa básica de defunción, las
+    causas asociadas son trastornos de la conducción/arritmias (39%) e
+    insuficiencia cardíaca (34%) (46). En cambio, las principales causas
+    básicas cuando la enfermedad de Chagas se registra como causa
+    asociada son la enfermedad isquémica del corazón (22%) y enfermedad
+    cerebrovascular (16,8%).
 
 ## Bibliografia
 
