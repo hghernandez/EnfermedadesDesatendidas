@@ -172,31 +172,47 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +------+------+
-    | Bajo | Alto |
-    | en X | en X |
-    |      |      |
-    | Alto | Alto |
-    | en Y | en Y |
-    +:====:+:====:+
-    | -    | -    |
-    |   \* |   \* |
-    | Bajo | Alto |
-    |      |      |
-    |   en |   en |
-    |      |      |
-    |    X |    X |
-    | \*\* | \*\* |
-    |      |      |
-    | -    | -    |
-    |   \* |   \* |
-    | Bajo | Bajo |
-    |      |      |
-    |   en |   en |
-    |      |      |
-    |    Y |    Y |
-    | \*\* | \*\* |
-    +------+------+
+    +-----+-----+
+    | B   | A   |
+    | ajo | lto |
+    | en  | en  |
+    | X   | X   |
+    |     |     |
+    | A   | A   |
+    | lto | lto |
+    | en  | en  |
+    | Y   | Y   |
+    +:===:+:===:+
+    | -   | -   |
+    |  \* |  \* |
+    |     |     |
+    |   B |   A |
+    | ajo | lto |
+    |     |     |
+    |     |     |
+    |  en |  en |
+    |     |     |
+    |     |     |
+    |   X |   X |
+    |     |     |
+    |   \ |   \ |
+    | *\* | *\* |
+    |     |     |
+    | -   | -   |
+    |  \* |  \* |
+    |     |     |
+    |   B |   B |
+    | ajo | ajo |
+    |     |     |
+    |     |     |
+    |  en |  en |
+    |     |     |
+    |     |     |
+    |   Y |   Y |
+    |     |     |
+    |   \ |   \ |
+    | *\* | *\* |
+    +-----+-----+
 
     : **Moran Scatterplot**
 
@@ -355,42 +371,42 @@ mortalidad por ETD y el sexo y la edad. En el período estudiado, más de
 la mitad de los fallecidos por ETD fueron hombres:
 
 -   Otros autores lo atribuyen al hecho de que los hombres son menos
-    propensos a buscar tratamiento temprano (30,31)
+    propensos a buscar tratamiento temprano (@30, @31).
 
--   Mayor tiempo de exposición en sus actividades laborales (32)
+-   Mayor tiempo de exposición en sus actividades laborales (@32).
 
 -   En Argentina, las mujeres refieren peores estados de salud
     autopercibidos que los hombres, lo que puede influir en la búsqueda
-    de atención (33,34).
+    de atención (@33, @34).
 
 La distribución espacial de las ETD, a excepción de la equinococosis,
 muestra mayor riesgo de mortalidad, en el noroeste y el noreste de
 Argentina:
 
 -   La asociación entre pobreza, urbanización y ETD ha sido analizada
-    por diversos investigadores (1,30,31,35).
+    por diversos investigadores (1,@30, @31, @35).
 
 -   En las provincias que integran estas regiones se detectan los
     porcentajes medios de hogares con necesidades básicas insatisfechas
     (que miden condiciones materiales de vida) de 25% en 2001 y de 17%
-    en 2010, 1,8 veces más altos que el porcentaje nacional (36).
+    en 2010, 1,8 veces más altos que el porcentaje nacional (@36).
 
 -   La mayor mortalidad por equinococis en la patagonia, podría estar
     relacionado con el hecho de que en esta zona se concentra la
     producción ovina del país y a que el autoconsumo tiene valores
-    mayores que la media nacional (1,37,38)
+    mayores que la media nacional (1,@37, @38)
 
 ¿Que podemos decir desde las "dimensiones del campo de salud?
 
 Zabala sostiene que "[...] la enfermedad de Chagas no ha sido tan
 olvidada como para desaparecer de la agenda, ni tan recordada como para
-cortar definitivamente su ciclo de reproducción" (42).
+cortar definitivamente su ciclo de reproducción" ( @42).
 
 ### Limitaciones
 
 -   El análisis de la mortalidad por ETD como causa básica presenta
-    algunas limitaciones, como la subestimación y el subregistro
-    (30,31,46). Si el médico que registra la defunción selecciona como
+    algunas limitaciones, como la subestimación y el subregistro (@30,
+    @31, @46). Si el médico que registra la defunción selecciona como
     causa básica las consecuencias de las ETD, la mortalidad se verá
     subestimada. Un estudio sobre mortalidad por enfermedad de Chagas
     según causas múltiples realizado en Saõ Paulo (Brasil) entre 1985 y
