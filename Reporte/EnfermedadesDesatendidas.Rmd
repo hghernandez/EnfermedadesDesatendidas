@@ -2,7 +2,12 @@
 title: "Enfermedades Desatendidas"
 author: "Mg. Hernan Hernandez"
 subtitle: "Epidemiología. Licenciatura en Nutrición"
-output: html_document
+output:
+  html_document:
+    theme: journal
+    toc: yes
+    toc_float:
+      collapsed: true
 bibliography: reference.bib
 editor_options: 
   markdown: 
@@ -37,6 +42,10 @@ load(paste0(ruta,"Reporte/piramide.RData"))
 xaringanExtra::use_panelset()
 ```
 
+```         
+<style> body { text-align: justify} </style> 
+```
+
 ## ¿Que son las enfermedades desatendidas?
 
 Las ETD comprenden un grupo de **entidades nosológicas** que se
@@ -44,8 +53,7 @@ distinguen por estar directamente relacionadas con **malas condiciones
 de vida** (residentes de zonas rurales remo tas, barrios marginales,
 grupos étnicos relegados o zonas de confl icto), con acceso inadecuado a
 los servicios de salud, la educación, al agua potable y al saneamiento
-básico, y con ambientes tropicales
-([@OMS2017],[@OMS2010],[@OMS2013],[@OPS2016]).
+básico, y con ambientes tropicales (@1, @2, @3, @4).
 
 **Aunque la mayoría de esas enfermedades tengan tratamiento y sean
 curables** con medicamentos que cuestan menos de un dólar por dosis o
@@ -57,7 +65,7 @@ desarrollo de nuevos y mejores medicamentos es escasa: sólo 4,4% de los
 nue vos productos aprobados entre 2000 y 2011 fueron para ETD, la
 mayoría formulaciones nuevas o combinaciones de drogas ya existentes. La
 ausencia de estadísticas confiables también con tribuye a su reducida
-visibilidad ([@OMS2010],[@OPS2016],[@WirtzVJetal.2016]).
+visibilidad (@1, @2, @5).
 
 -   Este grupo de enfermedades incluye:
 
@@ -94,34 +102,32 @@ visibilidad ([@OMS2010],[@OPS2016],[@WirtzVJetal.2016]).
 -   Lepra:
 
     -   En 2022 había 343 casos de lepra en tratamiento y 142 casos
-        nuevos registrados [@OMS2024].
+        nuevos registrados (@7).
 
 -   Leishmaniasis:
 
     -   128 casos de leishmanianiasis (en cualquiera de sus formas)
-        [@OMS2024].
+        (@7).
 
 -   Enfermedad de Chagas
 
     -   En Argentina se calcula que cerca de un millón y medio de
-        personas tienen Chagas [@Msal2022].
+        personas tienen Chagas (@6) .
 
     -   A 2022, en 9 provincias existe transmisión vectorial de la
-        Enfermedad de Chagas [@Msal2022].
+        Enfermedad de Chagas (@6).
 
     -   La transmision vertical (materno infantil) es en la actualidad
-        el principal mecanismo de transmisión en nuestro país
-        [@Msal2022].
+        el principal mecanismo de transmisión en nuestro país (@6).
 
     -   En el período 2019-2021 para el evento Chagas congénito/vertical
         con diagnóstico confirmatorio, se notificó el inicio del
         tratamiento en el 25% para el 2019, y en el 34% para los años
-        2020 y 2021 [@Msal2022].
+        2020 y 2021 (@6).
 
     -   Más del 80% de los casos reportados como "Chagas Agudo
         Congénito/Vertical" no registra el diagnóstico completo que
-        permita confirmar o descartar la infección por T. cruzi
-        [@Msal2022].
+        permita confirmar o descartar la infección por T. cruzi (@6).
 
 -   Equinocococis
 
@@ -172,47 +178,15 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +-----+-----+
-    | B   | A   |
-    | ajo | lto |
-    | en  | en  |
-    | X   | X   |
-    |     |     |
-    | A   | A   |
-    | lto | lto |
-    | en  | en  |
-    | Y   | Y   |
-    +:===:+:===:+
-    | -   | -   |
-    |  \* |  \* |
-    |     |     |
-    |   B |   A |
-    | ajo | lto |
-    |     |     |
-    |     |     |
-    |  en |  en |
-    |     |     |
-    |     |     |
-    |   X |   X |
-    |     |     |
-    |   \ |   \ |
-    | *\* | *\* |
-    |     |     |
-    | -   | -   |
-    |  \* |  \* |
-    |     |     |
-    |   B |   B |
-    | ajo | ajo |
-    |     |     |
-    |     |     |
-    |  en |  en |
-    |     |     |
-    |     |     |
-    |   Y |   Y |
-    |     |     |
-    |   \ |   \ |
-    | *\* | *\* |
-    +-----+-----+
+    +---------------+---------------+
+    | Bajo en X     | Alto en X     |
+    |               |               |
+    | Alto en Y     | Alto en Y     |
+    +:=============:+:=============:+
+    | **Bajo en X** | **Alto en X** |
+    |               |               |
+    | **Bajo en Y** | **Bajo en Y** |
+    +---------------+---------------+
 
     : **Moran Scatterplot**
 
@@ -384,7 +358,7 @@ muestra mayor riesgo de mortalidad, en el noroeste y el noreste de
 Argentina:
 
 -   La asociación entre pobreza, urbanización y ETD ha sido analizada
-    por diversos investigadores (1,@30, @31, @35).
+    por diversos investigadores (@1 ,@30 , @31, @35).
 
 -   En las provincias que integran estas regiones se detectan los
     porcentajes medios de hogares con necesidades básicas insatisfechas
@@ -394,7 +368,7 @@ Argentina:
 -   La mayor mortalidad por equinococis en la patagonia, podría estar
     relacionado con el hecho de que en esta zona se concentra la
     producción ovina del país y a que el autoconsumo tiene valores
-    mayores que la media nacional (1,@37, @38)
+    mayores que la media nacional (@1,@37, @38)
 
 ¿Que podemos decir desde las "dimensiones del campo de salud?
 
