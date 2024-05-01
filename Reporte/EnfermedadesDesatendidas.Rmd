@@ -53,8 +53,8 @@ xaringanExtra::use_panelset()
 
 Las ETD comprenden un grupo de **entidades nosológicas** que se
 distinguen por estar directamente relacionadas con **malas condiciones
-de vida** (residentes de zonas rurales remo tas, barrios marginales,
-grupos étnicos relegados o zonas de confl icto), con acceso inadecuado a
+de vida** (residentes de zonas rurales remotas, barrios marginales,
+grupos étnicos relegados o zonas de conflicto), con acceso inadecuado a
 los servicios de salud, la educación, al agua potable y al saneamiento
 básico, y con ambientes tropicales (@1, @2, @3, @4).
 
@@ -65,12 +65,12 @@ el perfil poblacional de los enfermos repercute poco en la agenda de
 prioridades de la salud pública, básicamente por su escasa incidencia en
 las decisiones políticas. Además, la inversión en investigación y
 desarrollo de nuevos y mejores medicamentos es escasa: sólo 4,4% de los
-nue vos productos aprobados entre 2000 y 2011 fueron para ETD, la
-mayoría formulaciones nuevas o combinaciones de drogas ya existentes. La
+nuevos productos aprobados entre 2000 y 2011 fueron para ETD, la mayoría
+formulaciones nuevas o combinaciones de drogas ya existentes. La
 ausencia de estadísticas confiables también con tribuye a su reducida
 visibilidad (@1, @2, @5).
 
--   Este grupo de enfermedades incluye:
+Este grupo de enfermedades incluye:
 
 -   dengue
 
@@ -100,17 +100,19 @@ visibilidad (@1, @2, @5).
 
 -   entre otras
 
-### Estadísticas Argentina
+### Estadísticas en Argentina
 
 -   Lepra:
 
     -   En 2022 había 343 casos de lepra en tratamiento y 142 casos
-        nuevos registrados (@7).
+        nuevos registrados (1 caso cada 2,5 dias aprox.) (@9).
 
 -   Leishmaniasis:
 
-    -   128 casos de leishmanianiasis (en cualquiera de sus formas)
-        (@7).
+    -   Para el año 2022, se confirmaron 163 casos de leishmanianiasis
+        (122 cutánea, 21 mucosa, 20 Visceral), es decir 1 caso cada 2
+        días (@7).
+    -   El 70% de los casos eran residentes del NOA (@7).
 
 -   Enfermedad de Chagas
 
@@ -195,17 +197,17 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +------------+------------+
-    | Bajo en X  | Alto en X  |
-    |            |            |
-    | Alto en Y  | Alto en Y  |
-    +:==========:+:==========:+
-    | **Bajo en  | **Alto en  |
-    | X**        | X**        |
-    |            |            |
-    | **Bajo en  | **Bajo en  |
-    | Y**        | Y**        |
-    +------------+------------+
+    +-----------+-----------+
+    | Bajo en X | Alto en X |
+    |           |           |
+    | Alto en Y | Alto en Y |
+    +:=========:+:=========:+
+    | **Bajo en | **Alto en |
+    | X**       | X**       |
+    |           |           |
+    | **Bajo en | **Bajo en |
+    | Y**       | Y**       |
+    +-----------+-----------+
 
     : **Moran Scatterplot**
 
