@@ -14,6 +14,12 @@ editor_options:
     wrap: 72
 ---
 
+```{=html}
+<style> 
+body { 
+text-align: justify} 
+</style>
+```
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE,
@@ -30,20 +36,17 @@ library(tidyverse)
 ```
 
 ```{r}
-ruta <- "C:/Users/NaranjaX/Documents/Mis Documentos/EnfermedadesDesatendidas/"
+ruta <- getwd()
 
 
-load(paste0(ruta,"Reporte/tasas_esp.RData"))
-load(paste0(ruta,"Reporte/piramide.RData"))
+load(paste0(ruta,"/tasas_esp.RData"))
+load(paste0(ruta,"/piramide.RData"))
+load(paste0(ruta,"/tasas_ntd_sub.RData"))
 
 ```
 
 ```{r xaringan-panelset, echo=FALSE}
 xaringanExtra::use_panelset()
-```
-
-```         
-<style> body { text-align: justify} </style> 
 ```
 
 ## ¿Que son las enfermedades desatendidas?
@@ -131,6 +134,15 @@ visibilidad (@1, @2, @5).
 
 -   Equinocococis
 
+    -   En 2016, se registraron 683 casos de hidatidosis en Argentina,
+        de los cuáles 372 fueron confirmados (@8, @9).
+
+    -   El impacto económico se deriva de el costo de atención por
+        paciente (estimado para 1997 en 4.500 USD), como así también por
+        las pérdidas por decomisos de vísceras y la disminución de
+        producción de carne, leche, lana y la fertilidad de las especies
+        afectadas (@9).
+
 ## Atecedentes
 
 [![Enfermedades Desatendidas
@@ -150,12 +162,17 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
 
     -   Las razones de mortalidad estandarizadas (RME) tomando como
         referencia la tasas específicas por edad para ambos sexos de
-        Argentina.
+        Argentina:
 
-        $Muertes esperadas=∑i​Ei​$
+        -   **Muertes esperadas** = \$\$\\sum\_{i=1}\^{n}
+            (Tasa\_{\\text{estándar por edad}} \\times
+            Población\_{\\text{por edad}})\$\$
+
+        -   **RME** = \$\$\\frac{Muertes\\ Observadas}{Muertes\\
+            Esperadas} \\times 100 \$\$
 
     -   Las RME fueron suavizadas mediante metodo Bayesiano Local: el
-        bjetivo es "pesar" la información del área que nos interesa; es
+        objetivo es "pesar" la información del área que nos interesa; es
         decir, ponderar los datos de mortalidad de una determinada área
         junto con la información sobre la distribución de la mortalidad
         del resto de las áreas y/o de un conjunto de ellas (áreas
@@ -178,15 +195,17 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +---------------+---------------+
-    | Bajo en X     | Alto en X     |
-    |               |               |
-    | Alto en Y     | Alto en Y     |
-    +:=============:+:=============:+
-    | **Bajo en X** | **Alto en X** |
-    |               |               |
-    | **Bajo en Y** | **Bajo en Y** |
-    +---------------+---------------+
+    +------------+------------+
+    | Bajo en X  | Alto en X  |
+    |            |            |
+    | Alto en Y  | Alto en Y  |
+    +:==========:+:==========:+
+    | **Bajo en  | **Alto en  |
+    | X**        | X**        |
+    |            |            |
+    | **Bajo en  | **Bajo en  |
+    | Y**        | Y**        |
+    +------------+------------+
 
     : **Moran Scatterplot**
 
@@ -271,7 +290,7 @@ ggplot(distr_edad,aes(x= edadquinq, fill= sexo ,y= ifelse(sexo== '1.Varones',cas
 ggplot(tasas_esp %>% filter(edadquinq != '18.Total'),
        aes(x= edadquinq, y= tasa, color= sexo))+
   geom_point()+
-  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup))+
+  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup),width = 1)+
   scale_x_discrete(labels= substring(distr_edad$edadquinq,4,str_length(distr_edad$edadquinq)))+
   scale_color_manual(values=c("#7FBC41","#F1B6DA","#8E0152"),labels=c("Varones","Mujeres","Ambos sexos"))+
   labs(x= "Edad Agrupada", y= "Tasa de mortalidad \n (por 1 millon de hab.)",
@@ -287,11 +306,26 @@ ggplot(tasas_esp %>% filter(edadquinq != '18.Total'),
 ggplot(tasas_esp %>% filter(edadquinq == '18.Total'),
        aes(x= sexo, y= tasa, color= sexo))+
   geom_point()+
-  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup))+
+  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup), width = 1)+
   scale_x_discrete(labels=c("Varones","Mujeres","Ambos sexos"))+
   scale_color_manual(values=c("#7FBC41","#F1B6DA","#8E0152"),labels=c("Varones","Mujeres","Ambos sexos"))+
   labs(x= "Edad Agrupada", y= "Tasa de mortalidad \n (por 1 millon de hab.)",
        color= "Sexo")
+
+```
+:::
+
+::: panel
+### Tasas específicas por Subtipo NTD {.panel-name}
+
+```{r tasas_especificas_subtipo_ntd}
+ggplot(tasas_esp_ntd,
+       aes(x= reorder(enf_desa_sub,tasa), y= tasa))+
+  geom_point(colour= "#8E0152")+
+  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup),width = 1,colour= "#8E0152",linewidth= 1)+
+    labs(x= "NTD subtipo", y= "Tasa de mortalidad \n (por 1 millon de hab.)")+
+  scale_y_continuous(breaks= c(seq(0,max(tasas_esp_ntd$tasa)+1,by= 0.25)))+
+  coord_flip()
 
 ```
 :::
@@ -393,6 +427,5 @@ cortar definitivamente su ciclo de reproducción" ( @42).
 
 ## Bibliografia
 
-```         
-<div id="refs"></div>
-```
+::: {#refs}
+:::

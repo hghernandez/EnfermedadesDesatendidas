@@ -337,3 +337,49 @@ save(tasas_esp,file="Reporte/tasas_esp.RData")
 round(tasas_esp$casos[tasas_esp$sexo== '2.Mujeres' & tasas_esp$edadquinq == '18.Total']*100/tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'])
 
 scales::comma(tasas_esp$casos[tasas_esp$sexo== '3.Ambos sexos' & tasas_esp$edadquinq == '18.Total'],big.mark = ".",decimal.mark = ",")
+
+##%######################################################%##
+#                                                          #
+####              Estimo las tasas por NTD              ####
+#                                                          #
+##%######################################################%##
+
+pob_agrup_tot <- poblacion %>%
+  filter(ano >= 2004 & ano <= 2018 & sexo == '3.Ambos sexos')%>%
+  mutate(gredad = fix_length(gredad,gredad)) %>%
+  group_by(sexo)%>%
+  summarise(poblacion= sum(poblacion))
+
+
+
+tasas_esp_ntd <- casos %>%
+  filter(enf_desa_sub != '30.Total NTD' & edadquinq != '18.Total' & sexo == '3.Ambos sexos') %>%
+  group_by(enf_desa_sub,sexo) %>%
+  summarise(casos= sum(casos)) %>%
+  left_join(pob_agrup_tot,by= c("sexo")) %>%
+  group_by(enf_desa_sub,sexo)%>%
+  summarise(casos= sum(casos),
+            poblacion= sum(poblacion))%>%
+  mutate(tasa= casos*1000000/poblacion) 
+
+
+for(i in 1:nrow(tasas_esp_ntd)){
+  tasas_esp_ntd[i,6] <- conf_interval(tasas_esp_ntd$casos[i],tasas_esp_ntd$poblacion[i])[1]*1000000
+  tasas_esp_ntd[i,7] <- conf_interval(tasas_esp_ntd$casos[i],tasas_esp_ntd$poblacion[i])[2]*1000000 
+}  
+
+colnames(tasas_esp_ntd)[6] <- "IC_inf"
+colnames(tasas_esp_ntd)[7] <- "IC_sup"
+
+tasas_esp_ntd$enf_desa_sub <- substring(tasas_esp_ntd$enf_desa_sub,4,stringr::str_length(tasas_esp_ntd$enf_desa_sub))
+
+save(tasas_esp_ntd,file="Reporte/tasas_ntd_sub.RData")
+
+
+ggplot(tasas_esp_ntd,
+       aes(x= reorder(enf_desa_sub,tasa), y= tasa))+
+  geom_point(colour= "#8E0152")+
+  geom_errorbar(aes(ymin= IC_inf, ymax= IC_sup),width = 1,colour= "#8E0152",linewidth= 1)+
+    labs(x= "NTD subtipo", y= "Tasa de mortalidad \n (por 1 millon de hab.)")+
+  scale_y_continuous(breaks= c(seq(0,max(tasas_esp_ntd$tasa)+1,by= 0.25)))+
+  coord_flip()
