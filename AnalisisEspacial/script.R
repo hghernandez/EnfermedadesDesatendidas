@@ -10,7 +10,7 @@ files <- list.files("tasas")
 
 files <- files[grepl(pattern = "suav",files)]
 
-load(paste0("tasas/",files[1]))
+load(paste0("tasas/",files[5]))
 
 
 
@@ -89,10 +89,6 @@ tasas_enf_df$suavizadas_agrup <- cut(tasas_enf_df$suavizadas,
                                c(round(unique(quantile(tasas_enf_df$suavizadas, probs = c(0, 0.2, 0.4, 0.6, 0.8),names = FALSE)), 2),Inf),
                                dig.lab = 6, include.lowest = TRUE,right = TRUE)
 
-#Guardo el archivo
-
-save(tasas_enf_df,file= paste0("Reporte/mapa_",gsub("\\.RData$","",files[1]),".RData"))
-
 #Formateo los puntos de corte
 
 #Creo esta función para editar las etiquetas
@@ -119,83 +115,149 @@ labeler <- function(labels){
 }
 
 #Armo el popup
-depto_popup <- paste0("<strong>Departamento: </strong>", 
-                      deptos$departamen, 
-                      "<br><strong>RME Suavizadas: </strong>", 
-                      round(deptos$suavizadas,2))
+# depto_popup <- paste0("<strong>Departamento: </strong>", 
+#                       tasas_enf_df$departamen, 
+#                       "<br><strong>RME Suavizadas: </strong>", 
+#                       round(tasas_enf_df$suavizadas,2))
+# 
+# #Armo los mapas
+# 
+# colores_personalizados <- colorFactor(
+#   palette = c("red", "blue", "lightpink", "skyblue2", "white"),
+#   domain = c("High-High", "Low-Low", "High-Low", "Low-High", "no significativo")
+# )
+# 
+# 
+# 
+# mapa_enf <-leaflet(tasas_enf_df) %>%
+#   addTiles(urlTemplate = "https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png",
+#            tileOptions(tms = TRUE,maxZoom = 20),attribution = '<a target="_blank" href="https://www.ign.gob.ar/argenmap/argenmap.jquery/docs/#datosvectoriales" style="color: black; text-decoration: underline; font-weight: normal;">Datos IGN Argentina // OpenStreetMap</a>') %>%
+#   addPolygons(fill = colores_personalizados(tasas_enf_df$mean),
+#               fillColor = colores_personalizados(tasas_enf_df$mean),
+#               fillOpacity = 0.7,
+#               stroke = TRUE,
+#               weight = 1,
+#               color = "#BDBDC3",
+#               popup = paste0(tasas_enf_df$departamen,"\n",tasas_enf_df$mean),
+#               group= "Cluster",
+#               highlight = highlightOptions(color = "white",
+#                                            weight = 2,
+#                                            bringToFront = TRUE)) %>%
+#   addLegend(position = "bottomright", # Posición de la leyenda
+#             pal= colores_personalizados,
+#             values= ~tasas_enf_df$mean,
+#             title = "Cluster",
+#             group = "Cluster")
+# 
+# n <- length(levels(tasas_enf_df$suavizadas_agrup))
+# 
+# pal <- colorFactor("BuPu",domain = tasas_enf_df$suavizadas_agrup)
+# 
+# mapa_enf <- mapa_enf %>%
+#   addPolygons(fill= tasas_enf_df$suavizadas_agrup,
+#               color= ~pal(tasas_enf_df$suavizadas_agrup),
+#               fillOpacity = 0.7,
+#               stroke = FALSE,
+#               weight = 1,
+#               popup = depto_popup,
+#               group= "Suavizadas",
+#               highlight = highlightOptions(color = "white",
+#                                            weight = 2,
+#                                            bringToFront = TRUE)) %>%
+#   addLegend(position = "bottomright", # Posición de la leyenda
+#             pal = pal, 
+#             values = tasas_enf_df$suavizadas_agrup,
+#             labels = labeler(tasas_enf_df$suavizadas_agrup),
+#             title = "RME suavizadas",
+#             group = "Suavizadas")
+# 
+# mapa_enf <- mapa_enf %>%
+#   addPolygons(fill = colores_personalizados(tasas_enf_df$cluster),
+#               fillColor = colores_personalizados(tasas_enf_df$cluster),
+#               fillOpacity = 0.7,
+#               stroke = TRUE,
+#               weight = 1,
+#               color = "grey",
+#               popup = paste0(tasas_enf_df$departamen,"\n",tasas_enf_df$cluster),
+#               group= "Cluster Test") %>%
+#   addLegend(position = "bottomright", # Posición de la leyenda
+#             pal= colores_personalizados, 
+#             values = ~tasas_enf_df$cluster, 
+#             title = "Cluster Test",
+#             group = "Cluster Test")
+# 
+# 
+# mapa_enf <- mapa_enf %>%
+#   addLayersControl(
+#     overlayGroups = c("Suavizadas","Cluster","Cluster Test"),
+#     position = "bottomleft",
+#     options = layersControlOptions(collapsed = F))
 
-#Armo los mapas
 
-colores_personalizados <- colorFactor(
-  palette = c("red", "blue", "lightpink", "skyblue2", "white"),
-  domain = c("High-High", "Low-Low", "High-Low", "Low-High", "no significativo")
-)
+#Guardo el mapa
+
+#save(tasas_enf_df,file= paste0("Reporte/mapa_",gsub("\\.RData$","",files[1]),".RData"))
 
 
 
-mapa_enf <-leaflet(deptos) %>%
-  addTiles(urlTemplate = "https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png",
-           tileOptions(tms = TRUE,maxZoom = 14),attribution = '<a target="_blank" href="https://www.ign.gob.ar/argenmap/argenmap.jquery/docs/#datosvectoriales" style="color: black; text-decoration: underline; font-weight: normal;">Datos IGN Argentina // OpenStreetMap</a>') %>%
-  addPolygons(fill = colores_personalizados(deptos$mean),
-              fillColor = colores_personalizados(deptos$mean),
-              fillOpacity = 0.7,
-              stroke = TRUE,
-              weight = 1,
-              color = "#BDBDC3",
-              popup = paste0(deptos$departamen,"\n",deptos$mean),
-              group= "Cluster",
-              highlight = highlightOptions(color = "white",
-                                           weight = 2,
-                                           bringToFront = TRUE)) %>%
-  addLegend(position = "bottomright", # Posición de la leyenda
-            colors = c("red", "blue", "lightpink", "skyblue2", "white"), 
-            labels = c("High-High", "Low-Low", "High-Low", "Low-High", "no significativo"), 
-            title = "Cluster",
-            group = "Cluster")
+n <- length(levels(tasas_enf_df$suavizadas_agrup))
 
-n <- length(levels(deptos$suavizadas_agrup))
-
-pal <- colorFactor("BuPu",domain = deptos$suavizadas_agrup)
-
-mapa_enf <- mapa_enf %>%
-  addPolygons(fill= deptos$suavizadas_agrup,
-              color= ~pal(deptos$suavizadas_agrup),
-              fillOpacity = 0.7,
-              stroke = FALSE,
-              weight = 1,
-              popup = depto_popup,
-              group= "Suavizadas",
-              highlight = highlightOptions(color = "white",
-                                           weight = 2,
-                                           bringToFront = TRUE)) %>%
-  addLegend(position = "bottomright", # Posición de la leyenda
-            pal = pal, 
-            values = deptos$suavizadas_agrup,
-            labels = labeler(deptos$suavizadas_agrup),
-            title = "RME suavizadas",
-            group = "Suavizadas")
-
-mapa_enf <- mapa_enf %>%
-  addPolygons(fill = colores_personalizados(deptos$cluster),
-              fillColor = colores_personalizados(deptos$cluster),
-              fillOpacity = 0.7,
-              stroke = TRUE,
-              weight = 1,
-              color = "grey",
-              popup = paste0(deptos$departamen,"\n",deptos$cluster),
-              group= "Cluster Test") %>%
-  addLegend(position = "bottomright", # Posición de la leyenda
-            colors = c("red", "blue", "lightpink", "skyblue2", "white"), 
-            labels = c("High-High", "Low-Low", "High-Low", "Low-High", "no significativo"), 
-            title = "Cluster Test",
-            group = "Cluster Test")
+pal <- RColorBrewer::brewer.pal(n,"BuPu")
+  
+tasas <- ggplot(tasas_enf_df)+
+  geom_sf(aes(fill= suavizadas_agrup), colour= "#E6E6E6")+
+  scale_fill_manual(values = pal,
+                    labels= labeler(tasas_enf_df$suavizadas_agrup))+
+  coord_sf()+
+  labs(fill= "RME suavizadas") +
+  theme(legend.title = element_text(size= 10,face = "bold"),
+        legend.text = element_text(size= 8,face = "bold"),
+        legend.background = element_rect(colour= "black",fill= "white"),
+        panel.background = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank())
 
 
-mapa_enf %>%
-  addLayersControl(
-    overlayGroups = c("Suavizadas","Cluster","Cluster Test"),
-    position = "bottomleft",
-    options = layersControlOptions(collapsed = F)
-)
+palette = c("red", "blue", "lightpink", "skyblue2", "white")
+domain = c("High-High", "Low-Low", "High-Low", "Low-High", "no significativo")
+  
+cluster <- ggplot(tasas_enf_df)+
+  geom_sf(aes(fill= mean), colour= "#E6E6E6")+
+  scale_fill_manual(values = palette,
+                    breaks = domain)+
+  labs(fill= "Cluster") +
+  coord_sf()+
+  theme(legend.title = element_text(size= 10,face = "bold"),
+        legend.text = element_text(size= 8,face = "bold"),
+        legend.background = element_rect(colour= "black",fill= "white"),
+        panel.background = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank())
 
-map
+cluster_test <- ggplot(tasas_enf_df)+
+  geom_sf(aes(fill= cluster), colour= "#E6E6E6")+
+  scale_fill_manual(values = palette,
+                    breaks = domain)+
+  labs(fill= "Cluster Test") +
+  coord_sf()+
+  theme(legend.title = element_text(size= 10,face = "bold"),
+        legend.text = element_text(size= 8,face = "bold"),
+        legend.background = element_rect(colour= "black",fill= "white"),
+        panel.background = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank())
+
+library(gridExtra)
+library(grid)
+
+tot_ntd <- grid.arrange(tasas,cluster,cluster_test,
+             ncol = 3, widths = c(2, 2, 2),
+             top= "Total Enfermedades Desatendidas (2004-2018)")
+
+library(R.utils)
+
+saveObject(tot_ntd,paste0("Reporte/mapa_tot_ntd.Rbin"))
+

@@ -33,6 +33,10 @@ knitr::opts_chunk$set(
 
 ```{r}
 library(tidyverse)
+library(leaflet)
+library(R.utils)
+library(grid)
+library(gridExtra)
 ```
 
 ```{r}
@@ -42,8 +46,13 @@ ruta <- getwd()
 load(paste0(ruta,"/tasas_esp.RData"))
 load(paste0(ruta,"/piramide.RData"))
 load(paste0(ruta,"/tasas_ntd_sub.RData"))
-
+map_tot_ntd <- loadObject(paste0(ruta,"/mapa_tot_ntd.Rbin"))
+map_chagas <- loadObject(paste0(ruta,"/mapa_chagas.Rbin"))
+map_lepra <- loadObject(paste0(ruta,"/mapa_lepra.Rbin"))
+map_leishmaniasis <- loadObject(paste0(ruta,"/mapa_leishmaniasis.Rbin"))
+map_equinococosis <- loadObject(paste0(ruta,"/mapa_equinococosis.Rbin"))
 ```
+
 
 ```{r xaringan-panelset, echo=FALSE}
 xaringanExtra::use_panelset()
@@ -197,17 +206,19 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +-----------+-----------+
-    | Bajo en X | Alto en X |
-    |           |           |
-    | Alto en Y | Alto en Y |
-    +:=========:+:=========:+
-    | **Bajo en | **Alto en |
-    | X**       | X**       |
-    |           |           |
-    | **Bajo en | **Bajo en |
-    | Y**       | Y**       |
-    +-----------+-----------+
+    +----------+----------+
+    | Bajo en  | Alto en  |
+    | X        | X        |
+    |          |          |
+    | Alto en  | Alto en  |
+    | Y        | Y        |
+    +:========:+:========:+
+    | **Bajo   | **Alto   |
+    | en X**   | en X**   |
+    |          |          |
+    | **Bajo   | **Bajo   |
+    | en Y**   | en Y**   |
+    +----------+----------+
 
     : **Moran Scatterplot**
 
@@ -333,12 +344,26 @@ ggplot(tasas_esp_ntd,
 :::
 :::
 
+<br>
+<br>
+<br>
+
 ::: panelset
 ::: panel
 ### Total NTD {.panel-name}
 
-```{r map_total_ntd}
+```{r map_total_ntd, layout = 'l-body'}
 
+grid.arrange(map_tot_ntd)
+
+```
+:::
+
+::: panel
+### Enfermedad de Chagas {.panel-name}
+
+```{r map_chagas}
+grid.arrange(map_chagas)
 
 ```
 :::
@@ -347,8 +372,7 @@ ggplot(tasas_esp_ntd,
 ### Lepra {.panel-name}
 
 ```{r map_lepra}
-
-
+grid.arrange(map_lepra)
 
 ```
 :::
@@ -357,8 +381,7 @@ ggplot(tasas_esp_ntd,
 ### Leishmaniasis {.panel-name}
 
 ```{r map_leishmaniasis}
-
-
+grid.arrange(map_leishmaniasis)
 
 ```
 :::
@@ -367,9 +390,7 @@ ggplot(tasas_esp_ntd,
 ### Equinococosis {.panel-name}
 
 ```{r map_equinococosis}
-
-
-
+grid.arrange(map_equinococosis)
 ```
 :::
 :::
