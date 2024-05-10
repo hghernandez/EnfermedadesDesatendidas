@@ -53,7 +53,6 @@ map_leishmaniasis <- loadObject(paste0(ruta,"/mapa_leishmaniasis.Rbin"))
 map_equinococosis <- loadObject(paste0(ruta,"/mapa_equinococosis.Rbin"))
 ```
 
-
 ```{r xaringan-panelset, echo=FALSE}
 xaringanExtra::use_panelset()
 ```
@@ -206,19 +205,15 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +----------+----------+
-    | Bajo en  | Alto en  |
-    | X        | X        |
-    |          |          |
-    | Alto en  | Alto en  |
-    | Y        | Y        |
-    +:========:+:========:+
-    | **Bajo   | **Alto   |
-    | en X**   | en X**   |
-    |          |          |
-    | **Bajo   | **Bajo   |
-    | en Y**   | en Y**   |
-    +----------+----------+
+    +---------------+---------------+
+    | Bajo en X     | Alto en X     |
+    |               |               |
+    | Alto en Y     | Alto en Y     |
+    +:=============:+:=============:+
+    | **Bajo en X** | **Alto en X** |
+    |               |               |
+    | **Bajo en Y** | **Bajo en Y** |
+    +---------------+---------------+
 
     : **Moran Scatterplot**
 
@@ -344,9 +339,7 @@ ggplot(tasas_esp_ntd,
 :::
 :::
 
-<br>
-<br>
-<br>
+<br> <br> <br>
 
 ::: panelset
 ::: panel
@@ -447,6 +440,12 @@ cortar definitivamente su ciclo de reproducción" ( @42).
     básicas cuando la enfermedad de Chagas se registra como causa
     asociada son la enfermedad isquémica del corazón (22%) y enfermedad
     cerebrovascular (16,8%).
+
+## Evaluación del webinar
+
+Tu opinión sobre este webinar es muy importante!!!!
+
+[![https://forms.gle/5XtcGqURFxAW3wza9](Evaluacion%20Webinar%20ETD.png){width="288"}](https://forms.gle/5XtcGqURFxAW3wza9)
 
 ## Bibliografia
 
