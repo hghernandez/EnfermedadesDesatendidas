@@ -205,15 +205,17 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +---------------+---------------+
-    | Bajo en X     | Alto en X     |
-    |               |               |
-    | Alto en Y     | Alto en Y     |
-    +:=============:+:=============:+
-    | **Bajo en X** | **Alto en X** |
-    |               |               |
-    | **Bajo en Y** | **Bajo en Y** |
-    +---------------+---------------+
+    +--------------+--------------+
+    | Bajo en X    | Alto en X    |
+    |              |              |
+    | Alto en Y    | Alto en Y    |
+    +:============:+:============:+
+    | **Bajo en    | **Alto en    |
+    | X**          | X**          |
+    |              |              |
+    | **Bajo en    | **Bajo en    |
+    | Y**          | Y**          |
+    +--------------+--------------+
 
     : **Moran Scatterplot**
 
@@ -422,9 +424,72 @@ Argentina:
 
 ¿Que podemos decir desde las "dimensiones del campo de salud?
 
-Zabala sostiene que "[...] la enfermedad de Chagas no ha sido tan
-olvidada como para desaparecer de la agenda, ni tan recordada como para
-cortar definitivamente su ciclo de reproducción" ( @42).
+-   "[...] el tratamiento de esas enfermedades no representan ganancias
+    significativas ni para la industria farmacéutica ni para los dueños
+    de clínicas y sanatorios. Esos tratamientos están representados por
+    los llamados "medicamentos huérfanos" denominación que reciben al no
+    ser rentables y por lo tanto no se los oferta en el mercado o su
+    producción es discontinua" (@10).
+
+-   La vigencia de esas enfermedades no se debe a la ausencia de
+    conocimientos para controlarlas y erradicarlas sino a que afectan a
+    individuos sin acceso a la ciudadanía, y que por lo tanto no tienen
+    capacidades de colocar sus problemas en la agenda del Estado (@10).
+
+-   Zabala sostiene que "[...] la enfermedad de Chagas no ha sido tan
+    olvidada como para desaparecer de la agenda, ni tan recordada como
+    para cortar definitivamente su ciclo de reproducción" ( @42).
+
+-   La trayectoria de la enfermedad de Chagas encierra una serie de
+    paradojas que han marcado su dilatada historia ( @42):
+
+    -   un hito en la historia de la ciencia, y una entidad que tiende a
+        hacerse invisible en la actual atención médica.
+
+    -   una "enfermedad olvidada", y una constante en las agendas de las
+        políticas públicas.
+
+    -   un relativo éxito en términos de combate del vector, y la
+        persistencia de una realidad que favorece su desarrollo.
+
+    -   la mayor población afectada, y el grupo social menos visible en
+        términos de identificación y organización social.
+
+    -   una enfermedad rural, pero un problema sanitario de zonas
+        urbanas y una amenaza para países desarrollados.
+
+    -   una bandera importante del compromiso de la comunidad científica
+        con la realidad social, y una marca de la escasa incidencia
+        concreta de la ciencia en las condiciones de vida de las
+        personas.
+
+    -   un área de conocimiento con un alto grado de avance, y
+        medicamentos de alrededor de 40 años de antigüedad y limitada
+        efectividad.
+
+    -   un hito en la historia de la ciencia, y una entidad que tiende a
+        hacerse invisible en la actual atención médica.
+
+    -   una "enfermedad olvidada", y una constante en las agendas de las
+        políticas públicas.
+
+    -   un relativo éxito en términos de combate del vector, y la
+        persistencia de una realidad que favorece su desarrollo.
+
+    -   la mayor población afectada, y el grupo social menos visible en
+        términos de identificación y organización social.
+
+    -   una enfermedad rural, pero un problema sanitario de zonas
+        urbanas y una amenaza para países desarrollados.
+
+    -   una bandera importante del compromiso de la comunidad científica
+        con la realidad social, y una marca de la escasa incidencia
+        concreta de la ciencia en las condiciones de vida de las
+        personas.
+
+    -   un área de conocimiento con un alto grado de avance, y
+        medicamentos de alrededor de 40 años de antigüedad y limitada
+        efectividad.
 
 ### Limitaciones
 
