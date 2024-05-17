@@ -205,17 +205,15 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +--------------+--------------+
-    | Bajo en X    | Alto en X    |
-    |              |              |
-    | Alto en Y    | Alto en Y    |
-    +:============:+:============:+
-    | **Bajo en    | **Alto en    |
-    | X**          | X**          |
-    |              |              |
-    | **Bajo en    | **Bajo en    |
-    | Y**          | Y**          |
-    +--------------+--------------+
+    +---------------+---------------+
+    | Bajo en X     | Alto en X     |
+    |               |               |
+    | Alto en Y     | Alto en Y     |
+    +:=============:+:=============:+
+    | **Bajo en X** | **Alto en X** |
+    |               |               |
+    | **Bajo en Y** | **Bajo en Y** |
+    +---------------+---------------+
 
     : **Moran Scatterplot**
 
@@ -427,7 +425,7 @@ Argentina:
 -   "[...] el tratamiento de esas enfermedades no representan ganancias
     significativas ni para la industria farmacéutica ni para los dueños
     de clínicas y sanatorios. Esos tratamientos están representados por
-    los llamados "medicamentos huérfanos" denominación que reciben al no
+    los llamados"medicamentos huérfanos" denominación que reciben al no
     ser rentables y por lo tanto no se los oferta en el mercado o su
     producción es discontinua" (@10).
 
