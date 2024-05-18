@@ -1,7 +1,12 @@
 ---
-title: "Enfermedades Desatendidas"
-author: "Mg. Hernan Hernandez"
-subtitle: "Epidemiología. Licenciatura en Nutrición"
+title: |
+  <img src="C:/Users/usuario/Documents/Epidemiologia/EnfermedadesDesatendidas/Reporte/logo-bromatologia.png" style="text-align: center; margin-right: 10px;">
+  <br>
+  Las enfermedades desatendidas en la era de la transición epidemiológica
+subtitle: "Análisis de la mortalidad para el periodo 2004-2018"
+author: 
+  - name: "Mg. Hernan Hernandez"
+  - affiliation: "Epidemiología. Licenciatura en Nutrición"
 output:
   html_document:
     theme: journal
@@ -14,12 +19,17 @@ editor_options:
     wrap: 72
 ---
 
+
+
 ```{=html}
 <style> 
 body { 
 text-align: justify} 
 </style>
 ```
+
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE,
@@ -30,6 +40,8 @@ knitr::opts_chunk$set(
 )
 
 ```
+
+
 
 ```{r}
 library(tidyverse)
@@ -110,18 +122,6 @@ Este grupo de enfermedades incluye:
 
 ### Estadísticas en Argentina
 
--   Lepra:
-
-    -   En 2022 había 343 casos de lepra en tratamiento y 142 casos
-        nuevos registrados (1 caso cada 2,5 dias aprox.) (@9).
-
--   Leishmaniasis:
-
-    -   Para el año 2022, se confirmaron 163 casos de leishmanianiasis
-        (122 cutánea, 21 mucosa, 20 Visceral), es decir 1 caso cada 2
-        días (@7).
-    -   El 70% de los casos eran residentes del NOA (@7).
-
 -   Enfermedad de Chagas
 
     -   En Argentina se calcula que cerca de un millón y medio de
@@ -141,6 +141,20 @@ Este grupo de enfermedades incluye:
     -   Más del 80% de los casos reportados como "Chagas Agudo
         Congénito/Vertical" no registra el diagnóstico completo que
         permita confirmar o descartar la infección por T. cruzi (@6).
+
+<!-- -->
+
+-   Lepra:
+
+    -   En 2022 había 343 casos de lepra en tratamiento y 142 casos
+        nuevos registrados (1 caso cada 2,5 dias aprox.) (@9).
+
+-   Leishmaniasis:
+
+    -   Para el año 2022, se confirmaron 163 casos de leishmanianiasis
+        (122 cutánea, 21 mucosa, 20 Visceral), es decir 1 caso cada 2
+        días (@7).
+    -   El 70% de los casos eran residentes del NOA (@7).
 
 -   Equinocococis
 
@@ -205,15 +219,17 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +---------------+---------------+
-    | Bajo en X     | Alto en X     |
-    |               |               |
-    | Alto en Y     | Alto en Y     |
-    +:=============:+:=============:+
-    | **Bajo en X** | **Alto en X** |
-    |               |               |
-    | **Bajo en Y** | **Bajo en Y** |
-    +---------------+---------------+
+    +-------------+-------------+
+    | Bajo en X   | Alto en X   |
+    |             |             |
+    | Alto en Y   | Alto en Y   |
+    +:===========:+:===========:+
+    | **Bajo en   | **Alto en   |
+    | X**         | X**         |
+    |             |             |
+    | **Bajo en   | **Bajo en   |
+    | Y**         | Y**         |
+    +-------------+-------------+
 
     : **Moran Scatterplot**
 
@@ -341,52 +357,52 @@ ggplot(tasas_esp_ntd,
 
 <br> <br> <br>
 
-::: panelset
-::: panel
-### Total NTD {.panel-name}
+<!-- ::: panelset -->
+<!-- ::: panel -->
+<!-- ### Total NTD {.panel-name} -->
 
-```{r map_total_ntd, layout = 'l-body'}
+<!-- ```{r map_total_ntd, layout = 'l-body'} -->
 
-grid.arrange(map_tot_ntd)
+<!-- grid.arrange(map_tot_ntd) -->
 
-```
-:::
+<!-- ``` -->
+<!-- ::: -->
 
-::: panel
-### Enfermedad de Chagas {.panel-name}
+<!-- ::: panel -->
+<!-- ### Enfermedad de Chagas {.panel-name} -->
 
-```{r map_chagas}
-grid.arrange(map_chagas)
+<!-- ```{r map_chagas} -->
+<!-- grid.arrange(map_chagas) -->
 
-```
-:::
+<!-- ``` -->
+<!-- ::: -->
 
-::: panel
-### Lepra {.panel-name}
+<!-- ::: panel -->
+<!-- ### Lepra {.panel-name} -->
 
-```{r map_lepra}
-grid.arrange(map_lepra)
+<!-- ```{r map_lepra} -->
+<!-- grid.arrange(map_lepra) -->
 
-```
-:::
+<!-- ``` -->
+<!-- ::: -->
 
-::: panel
-### Leishmaniasis {.panel-name}
+<!-- ::: panel -->
+<!-- ### Leishmaniasis {.panel-name} -->
 
-```{r map_leishmaniasis}
-grid.arrange(map_leishmaniasis)
+<!-- ```{r map_leishmaniasis} -->
+<!-- grid.arrange(map_leishmaniasis) -->
 
-```
-:::
+<!-- ``` -->
+<!-- ::: -->
 
-::: panel
-### Equinococosis {.panel-name}
+<!-- ::: panel -->
+<!-- ### Equinococosis {.panel-name} -->
 
-```{r map_equinococosis}
-grid.arrange(map_equinococosis)
-```
-:::
-:::
+<!-- ```{r map_equinococosis} -->
+<!-- grid.arrange(map_equinococosis) -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- ::: -->
 
 ## Discusión
 
@@ -440,30 +456,6 @@ Argentina:
 
 -   La trayectoria de la enfermedad de Chagas encierra una serie de
     paradojas que han marcado su dilatada historia ( @42):
-
-    -   un hito en la historia de la ciencia, y una entidad que tiende a
-        hacerse invisible en la actual atención médica.
-
-    -   una "enfermedad olvidada", y una constante en las agendas de las
-        políticas públicas.
-
-    -   un relativo éxito en términos de combate del vector, y la
-        persistencia de una realidad que favorece su desarrollo.
-
-    -   la mayor población afectada, y el grupo social menos visible en
-        términos de identificación y organización social.
-
-    -   una enfermedad rural, pero un problema sanitario de zonas
-        urbanas y una amenaza para países desarrollados.
-
-    -   una bandera importante del compromiso de la comunidad científica
-        con la realidad social, y una marca de la escasa incidencia
-        concreta de la ciencia en las condiciones de vida de las
-        personas.
-
-    -   un área de conocimiento con un alto grado de avance, y
-        medicamentos de alrededor de 40 años de antigüedad y limitada
-        efectividad.
 
     -   un hito en la historia de la ciencia, y una entidad que tiende a
         hacerse invisible en la actual atención médica.
