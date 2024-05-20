@@ -6,7 +6,7 @@ title: |
 subtitle: "Análisis de la mortalidad para el periodo 2004-2018"
 author: 
   - name: "Mg. Hernan Hernandez"
-  - affiliation: "Epidemiología. Licenciatura en Nutrición"
+    affiliation: "Epidemiología. Licenciatura en Nutrición"
 output:
   html_document:
     theme: journal
