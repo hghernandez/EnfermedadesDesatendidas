@@ -1,6 +1,6 @@
 ---
 title: |
-  <img src="C:/Users/usuario/Documents/Epidemiologia/EnfermedadesDesatendidas/Reporte/logo-bromatologia.png" style="text-align: center; margin-right: 10px;">
+  <img src="C:/Users/NaranjaX/Documents/Mis Documentos/EnfermedadesDesatendidas/Reporte/logo-bromatologia.png" style="text-align: center; margin-right: 10px;">
   <br>
   Las enfermedades desatendidas en la era de la transición epidemiológica
 subtitle: "Análisis de la mortalidad para el periodo 2004-2018"
@@ -19,17 +19,12 @@ editor_options:
     wrap: 72
 ---
 
-
-
 ```{=html}
 <style> 
 body { 
 text-align: justify} 
 </style>
 ```
-
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = FALSE,
@@ -40,8 +35,6 @@ knitr::opts_chunk$set(
 )
 
 ```
-
-
 
 ```{r}
 library(tidyverse)
@@ -219,17 +212,17 @@ Provincias](articuloprevio.png){width="800"}](https://iris.paho.org/bitstream/ha
     comparamos ambos con los valores medios (de la unidad y del vecino),
     podemos obtener:
 
-    +-------------+-------------+
-    | Bajo en X   | Alto en X   |
-    |             |             |
-    | Alto en Y   | Alto en Y   |
-    +:===========:+:===========:+
-    | **Bajo en   | **Alto en   |
-    | X**         | X**         |
-    |             |             |
-    | **Bajo en   | **Bajo en   |
-    | Y**         | Y**         |
-    +-------------+-------------+
+    +------------+------------+
+    | Bajo en X  | Alto en X  |
+    |            |            |
+    | Alto en Y  | Alto en Y  |
+    +:==========:+:==========:+
+    | **Bajo en  | **Alto en  |
+    | X**        | X**        |
+    |            |            |
+    | **Bajo en  | **Bajo en  |
+    | Y**        | Y**        |
+    +------------+------------+
 
     : **Moran Scatterplot**
 
@@ -357,52 +350,69 @@ ggplot(tasas_esp_ntd,
 
 <br> <br> <br>
 
-<!-- ::: panelset -->
-<!-- ::: panel -->
-<!-- ### Total NTD {.panel-name} -->
+::: panelset
 
-<!-- ```{r map_total_ntd, layout = 'l-body'} -->
+::: panel
 
-<!-- grid.arrange(map_tot_ntd) -->
+### Total NTD {.panel-name}
 
-<!-- ``` -->
-<!-- ::: -->
+```{r map_total_ntd, layout = 'l-body'}
 
-<!-- ::: panel -->
-<!-- ### Enfermedad de Chagas {.panel-name} -->
+grid.arrange(map_tot_ntd)
 
-<!-- ```{r map_chagas} -->
-<!-- grid.arrange(map_chagas) -->
+```
 
-<!-- ``` -->
-<!-- ::: -->
+:::
 
-<!-- ::: panel -->
-<!-- ### Lepra {.panel-name} -->
+::: panel
 
-<!-- ```{r map_lepra} -->
-<!-- grid.arrange(map_lepra) -->
+### Enfermedad de Chagas {.panel-name}
 
-<!-- ``` -->
-<!-- ::: -->
+```{r map_chagas}
 
-<!-- ::: panel -->
-<!-- ### Leishmaniasis {.panel-name} -->
+grid.arrange(map_chagas)
 
-<!-- ```{r map_leishmaniasis} -->
-<!-- grid.arrange(map_leishmaniasis) -->
+```
 
-<!-- ``` -->
-<!-- ::: -->
+:::
 
-<!-- ::: panel -->
-<!-- ### Equinococosis {.panel-name} -->
+::: panel
 
-<!-- ```{r map_equinococosis} -->
-<!-- grid.arrange(map_equinococosis) -->
-<!-- ``` -->
-<!-- ::: -->
-<!-- ::: -->
+### Lepra {.panel-name}
+
+```{r map_lepra}
+
+grid.arrange(map_lepra)
+
+```
+
+:::
+
+::: panel
+
+### Leishmaniasis {.panel-name}
+
+```{r map_leishmaniasis}
+
+grid.arrange(map_leishmaniasis)
+
+```
+
+:::
+
+::: panel
+
+### Equinococosis {.panel-name}
+
+```{r map_equinococosis}
+
+grid.arrange(map_equinococosis)
+
+```
+
+:::
+
+:::
 
 ## Discusión
 
