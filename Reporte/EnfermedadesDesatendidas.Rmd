@@ -3,10 +3,11 @@ title: |
   <img src="C:/Users/NaranjaX/Documents/Mis Documentos/EnfermedadesDesatendidas/Reporte/logo-bromatologia.png" style="text-align: center; margin-right: 10px;">
   <br>
   Las enfermedades desatendidas en la era de la transición epidemiológica
-subtitle: "Análisis de la mortalidad para el periodo 2004-2018"
+subtitle: "Análisis de la mortalidad para el período 2004-2018"
 author: 
   - name: "Mg. Hernan Hernandez"
     affiliation: "Epidemiología. Licenciatura en Nutrición"
+    email: hernan.hernandez@uner.edu.ar
 output:
   html_document:
     theme: journal
