@@ -1,0 +1,154 @@
+---
+title: "Evaluación Webinar: Las enfermedades desatendidas en la era de la transición epidemiológica"
+output: blastula::blastula_email 
+date: "2023-07-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "##",
+  R.options = list(width = 60),
+  fig.align = "center",
+  fig.height= 5,
+  fig.width = 8,
+  out.width="75%"
+)
+```
+
+```{r}
+library(googledrive)
+library(googlesheets4)
+library(tidyverse)
+
+#Cargo el csv
+
+dataset <- read_sheet("https://docs.google.com/spreadsheets/d/1LAZuwHn2ONQu1JLniHgTai4B0Ny7Z4v7_KplqhAx0gw/edit?resourcekey#gid=2068206867")
+```
+
+# Evaluación Webinar: Las enfermedades desatendidas en la era de la transición epidemiológica
+
+## Introducción
+
+El webinar se llevó a cabo el día jueves 23 de mayo de 2024 en el marco de la iniciativa "Haciendo Ciencia", organizada por la Secretaría de Investigación de la Facultad de Bromatología. La disertación estuvo a cargo del Mg. Hernan Hernandez JTP de la asignatura Epidemiología de la Licenciatura en Nutrición.
+El presente reporte muestra la devolución hecho por `r nrow(dataset)` participantes del taller.
+
+### ¿Qué tan probable es que recomiendes este Webinar a tus compañeros de la facultad o del trabajo?(Siendo 1 Nada, 5 Mucho)
+
+```{r}
+dataset %>%
+  group_by_at(3) %>%
+  summarise(n= n()) %>%
+  mutate(prop= round(n*100/sum(n),2)) %>%
+  ggplot(aes(x= as.factor(.[[1]]),y= prop, fill= as.factor(.[[1]]))) +
+  geom_bar(stat= 'identity') +
+  geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
+  scale_fill_manual(values= c("#68cce6","#003262"),guide= 'none')+
+  labs(x= "", y= '%', title= names(dataset)[3])+
+  theme_minimal()
+```
+
+### En general, ¿cómo describirías el taller?
+
+```{r}
+dataset %>%
+  group_by_at(4) %>%
+  summarise(n= n()) %>%
+  mutate(prop= round(n*100/sum(n),2)) %>% 
+  ggplot(aes(x= "",y= prop, fill= as.factor(.[[1]]))) +
+  geom_col() +
+  geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
+  scale_fill_manual(values= c("#68cce6","#003262"))+
+  labs(x= "", y= '%', title= names(dataset)[4], fill= "")+
+  coord_polar("y") +
+  theme_minimal()
+```
+
+### ¿Qué tan claros fueron los objetivos el webinar?
+
+```{r}
+dataset %>%
+  group_by_at(5) %>%
+  summarise(n= n()) %>%
+  mutate(prop= round(n*100/sum(n),2)) %>% 
+  ggplot(aes(x= "",y= prop, fill= as.factor(.[[1]]))) +
+  geom_col() +
+  geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
+  scale_fill_manual(values= c("#68cce6","#003262"))+
+  labs(x= "", y= '%', title= names(dataset)[5], fill= "")+
+  coord_polar("y") +
+  theme_minimal()
+```
+
+### ¿Cómo calificarías en general al expositor del webinar?
+
+```{r}
+dataset %>%
+  group_by_at(6) %>%
+  summarise(n= n()) %>%
+  mutate(prop= round(n*100/sum(n),2)) %>%
+  ggplot(aes(x= as.factor(.[[1]]),y= prop, fill= as.factor(.[[1]]))) +
+  geom_bar(stat= 'identity') +
+  geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
+  scale_fill_manual(values= c("#68cce6","#003262"),guide= 'none')+
+  labs(x= "", y= '%', title= names(dataset)[6])+
+  theme_minimal()
+
+```
+
+### ¿Qué tan adecuadas te parecieron los temas y metodologías presentados en el webinar?
+
+```{r}
+dataset %>%
+  group_by_at(7) %>%
+  summarise(n= n()) %>%
+  mutate(prop= round(n*100/sum(n),2)) %>% 
+  ggplot(aes(x= "",y= prop, fill= as.factor(.[[1]]))) +
+  geom_col() +
+  geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
+  scale_fill_manual(values= c("#68cce6","#003262"))+
+  labs(x= "", y= '%', title= names(dataset)[7], fill= "")+
+  coord_polar("y") +
+  theme_minimal()
+```
+
+### Por último decinos, sos:
+
+```{r}
+pal <- RColorBrewer::brewer.pal(5,"Blues")
+
+dataset %>%
+  group_by_at(8) %>%
+  summarise(n= n()) %>%
+  mutate(prop= round(n*100/sum(n),2)) %>%
+  ggplot(aes(x= as.factor(.[[1]]),y= prop, fill= as.factor(.[[1]]))) +
+  geom_bar(stat= 'identity') +
+  geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'black') +
+  scale_fill_manual(values= pal,guide= 'none')+
+  labs(x= "", y= '%', title= names(dataset)[8])+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+### Otros comentarios
+
+```{r results='asis'}
+
+com <- as.data.frame(dataset[!is.na(dataset[,9]),9])
+
+names(com) <- NULL
+
+for(i in 1:nrow(com)){
+  
+cat("\n\n")
+print(com[i,1])
+cat("\n")
+  
+}
+
+
+```
+
+
