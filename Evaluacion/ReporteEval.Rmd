@@ -1,6 +1,6 @@
 ---
 title: "Evaluación Webinar: Las enfermedades desatendidas en la era de la transición epidemiológica"
-output: blastula::blastula_email 
+output: blastula::blastula_email
 date: "2023-07-12"
 ---
 
@@ -28,12 +28,12 @@ library(tidyverse)
 dataset <- read_sheet("https://docs.google.com/spreadsheets/d/1LAZuwHn2ONQu1JLniHgTai4B0Ny7Z4v7_KplqhAx0gw/edit?resourcekey#gid=2068206867")
 ```
 
-# Evaluación Webinar: Las enfermedades desatendidas en la era de la transición epidemiológica
+# Evaluación webinar: Las enfermedades desatendidas en la era de la transición epidemiológica
 
 ## Introducción
 
 El webinar se llevó a cabo el día jueves 23 de mayo de 2024 en el marco de la iniciativa "Haciendo Ciencia", organizada por la Secretaría de Investigación de la Facultad de Bromatología. La disertación estuvo a cargo del Mg. Hernan Hernandez JTP de la asignatura Epidemiología de la Licenciatura en Nutrición.
-El presente reporte muestra la devolución hecho por `r nrow(dataset)` participantes del taller.
+El presente reporte muestra la devolución realizada por `r nrow(dataset)` participantes del taller.
 
 ### ¿Qué tan probable es que recomiendes este Webinar a tus compañeros de la facultad o del trabajo?(Siendo 1 Nada, 5 Mucho)
 
@@ -46,7 +46,7 @@ dataset %>%
   geom_bar(stat= 'identity') +
   geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
   scale_fill_manual(values= c("#68cce6","#003262"),guide= 'none')+
-  labs(x= "", y= '%', title= names(dataset)[3])+
+  labs(x= "", y= '%')+
   theme_minimal()
 ```
 
@@ -61,7 +61,7 @@ dataset %>%
   geom_col() +
   geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
   scale_fill_manual(values= c("#68cce6","#003262"))+
-  labs(x= "", y= '%', title= names(dataset)[4], fill= "")+
+  labs(x= "", y= '%', fill= "")+
   coord_polar("y") +
   theme_minimal()
 ```
@@ -77,7 +77,7 @@ dataset %>%
   geom_col() +
   geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
   scale_fill_manual(values= c("#68cce6","#003262"))+
-  labs(x= "", y= '%', title= names(dataset)[5], fill= "")+
+  labs(x= "", y= '%', fill= "")+
   coord_polar("y") +
   theme_minimal()
 ```
@@ -93,7 +93,7 @@ dataset %>%
   geom_bar(stat= 'identity') +
   geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
   scale_fill_manual(values= c("#68cce6","#003262"),guide= 'none')+
-  labs(x= "", y= '%', title= names(dataset)[6])+
+  labs(x= "", y= '%')+
   theme_minimal()
 
 ```
@@ -109,7 +109,7 @@ dataset %>%
   geom_col() +
   geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'white') +
   scale_fill_manual(values= c("#68cce6","#003262"))+
-  labs(x= "", y= '%', title= names(dataset)[7], fill= "")+
+  labs(x= "", y= '%', fill= "")+
   coord_polar("y") +
   theme_minimal()
 ```
@@ -127,7 +127,7 @@ dataset %>%
   geom_bar(stat= 'identity') +
   geom_text(aes(label= n),position = position_stack(vjust = 0.5), color= 'black') +
   scale_fill_manual(values= pal,guide= 'none')+
-  labs(x= "", y= '%', title= names(dataset)[8])+
+  labs(x= "", y= '%')+
   theme_minimal()+
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 ```
@@ -151,4 +151,6 @@ cat("\n")
 
 ```
 
+#### Mg. Hernan Hernandez<br>Epidemiología. Licenciatura en Nutrición
 
+![](C:/Users/usuario/Documents/Epidemiologia/EnfermedadesDesatendidas/Reporte/logo-bromatologia.png){height='50'}
