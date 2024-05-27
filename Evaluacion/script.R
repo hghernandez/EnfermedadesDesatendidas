@@ -25,8 +25,8 @@ email <- blastula::render_email(paste0(ruta,"/Evaluacion/ReporteEval.Rmd"))
 email %>%
   smtp_send(
     from = "hernan.hernandez@uner.edu.ar",
-    to = c("hernan.hernandez@uner.edu.ar"),
-    subject = "Evaluación Webinar Enfermedades Desatendidas",
+    to = c("hernan.hernandez@uner.edu.ar","rosa.abalos@uner.edu.ar","silvia.grenovero@uner.edu.ar"),
+    subject = "Evaluación webinar 'Enfermedades Desatendidas'",
     
     credentials =
       creds_file(file = "gmail_creds")

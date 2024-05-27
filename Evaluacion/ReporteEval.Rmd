@@ -153,4 +153,4 @@ cat("\n")
 
 #### Mg. Hernan Hernandez<br>Epidemiología. Licenciatura en Nutrición
 
-![](C:/Users/usuario/Documents/Epidemiologia/EnfermedadesDesatendidas/Reporte/logo-bromatologia.png){height='50'}
+![](logo-bromatologia.png){height='50'}
